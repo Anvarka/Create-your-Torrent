@@ -1,0 +1,122 @@
+syntax = "proto3";
+option java_multiple_files = true;
+
+package ru.itmo.java.message.torrent;
+
+
+message RequestToTracker{
+  oneof request {
+    ListRequest listRequest = 1;
+    UploadRequest upload = 2;
+    SourcesRequest sources = 3;
+    UpdateRequest update = 4;
+  }
+}
+
+message ResponseFromTracker{
+  oneof response {
+    ListAnswer listAnswer = 1;
+    UploadAnswer uploadAnswer = 2;
+    SourcesAnswer sourcesAnswer = 3;
+    UpdateAnswer updateAnswer = 4;
+  }
+}
+
+message RequestToClientServer{
+  oneof request {
+    StatRequest statRequest = 1;
+    GetRequest getRequest = 2;
+  }
+}
+
+message ResponseFromClientServer{
+  oneof response {
+    StatAnswer statAnswer = 1;
+    GetAnswer getAnswer = 2;
+  }
+}
+
+message FileContent {
+  int64 idFile = 2;
+  string filename = 3;
+  int64 sizeFile = 4;
+}
+
+message UserInfo {
+  string ip = 1;
+  int32 port = 2;
+}
+
+// List request
+message ListRequest {
+}
+
+message ListAnswer {
+  int64 countFile = 1;
+  repeated FileContent fileContent = 2;
+}
+
+// Upload request
+message UploadRequest {
+  string filename = 1;
+  int64 size = 2;
+  UserInfo userInfo = 3;
+}
+
+message UploadAnswer {
+  int64 idFile = 1;
+  string filename = 2;
+  int64 size = 3;
+}
+
+// Sources request
+message SourcesRequest {
+  int64 idFile = 1;
+}
+
+message SourcesAnswer {
+  int64 sizeRes = 1;
+  repeated UserInfo clientWithFile = 2;
+  int64 idFile = 3;
+}
+
+message UpdateRequest {
+  UserInfo userInfo = 1;
+  int32 portOfClientServer = 2;
+  int64 countSharedFiles = 3;
+  repeated UploadAnswer uploadAnswer = 4;
+}
+
+message UpdateAnswer {
+  bool statusUpdate = 1;
+}
+
+// Stat Request
+message StatRequest {
+  int64 idFile = 1;
+}
+
+message StatAnswer {
+  UserInfo client = 1;
+  int64 idFile = 2;
+  int64 countOfAvailableParts = 3;
+  repeated int64 part = 4;
+}
+
+// Get Request
+message GetRequest {
+  int64 idFile = 1;
+  int64 partOfFile = 2;
+}
+
+message GetAnswer {
+  bytes content = 1;
+  FileContent fileContent = 2;
+  int64 partOfFile = 3;
+}
+
+message FileParts {
+  UserInfo userInfo = 1;
+  int64 idFile = 2;
+  int64 partOfFile = 3;
+}
