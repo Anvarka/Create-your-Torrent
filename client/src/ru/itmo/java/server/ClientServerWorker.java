@@ -16,9 +16,9 @@ public class ClientServerWorker implements Runnable, AutoCloseable {
     private Socket clientSocket;
     private final Logger logger = Logger.getLogger(ClientServerWorker.class.getName());
     private final ExecutorService writePool = Executors.newSingleThreadExecutor();
-    private final ConcurrentHashMap<UploadAnswer, List<Long>> fileAndParts;
+    private final ConcurrentHashMap<FileContent, List<Long>> fileAndParts;
 
-    public ClientServerWorker(Socket socket, ConcurrentHashMap<UploadAnswer, List<Long>> distributedFiles) {
+    public ClientServerWorker(Socket socket, ConcurrentHashMap<FileContent, List<Long>> distributedFiles) {
         clientSocket = socket;
         this.fileAndParts = distributedFiles;
     }
@@ -55,10 +55,13 @@ public class ClientServerWorker implements Runnable, AutoCloseable {
     private WriteTask handle(StatRequest statRequest) throws IOException {
         logger.info("Get StatRequest");
         var idFile = statRequest.getIdFile();
-        ConcurrentHashMap<Long, UploadAnswer> idKeyAndInfo = new ConcurrentHashMap<>();
-        for (UploadAnswer uploadAnswer : fileAndParts.keySet()) {
-            idKeyAndInfo.put(uploadAnswer.getIdFile(), uploadAnswer);
+        // lock.lock;
+        // try {
+        ConcurrentHashMap<Long, FileContent> idFileAndContent = new ConcurrentHashMap<>();
+        for (var fileContent : fileAndParts.keySet()) {
+            idFileAndContent.put(fileContent.getIdFile(), fileContent);
         }
+        // finally {lock.unlock();}
 
         UserInfo userInfo = UserInfo.newBuilder()
                 .setIp(clientSocket.getInetAddress().getHostAddress())
@@ -67,7 +70,9 @@ public class ClientServerWorker implements Runnable, AutoCloseable {
 
         var statAnswer = StatAnswer.newBuilder()
                 .setClient(userInfo)
-                .addAllPart(fileAndParts.get(idKeyAndInfo.get(idFile)))
+                .setIdFile(idFile)
+                .setCountOfAvailableParts(fileAndParts.get(idFileAndContent.get(idFile)).size())
+                .addAllPart(fileAndParts.get(idFileAndContent.get(idFile)))
                 .build();
 
         return () -> ResponseFromClientServer.newBuilder()
@@ -76,24 +81,27 @@ public class ClientServerWorker implements Runnable, AutoCloseable {
                 .writeDelimitedTo(clientSocket.getOutputStream());
     }
 
-    private WriteTask handle(GetRequest request) {
+    private WriteTask handle(GetRequest getRequest) {
         logger.info("Get GetRequest");
-        long idFile = request.getIdFile();
-        long partNumber = request.getPartOfFile();
-        ConcurrentHashMap<Long, UploadAnswer> idKeyAndInfo = new ConcurrentHashMap<>();
-        for (UploadAnswer uploadAnswer : fileAndParts.keySet()) {
-            idKeyAndInfo.put(uploadAnswer.getIdFile(), uploadAnswer);
+        long idFile = getRequest.getIdFile();
+        logger.info("Get id:" + idFile);
+        long partNumber = getRequest.getPartOfFile();
+        logger.info("Get part: " + partNumber);
+        ConcurrentHashMap<Long, FileContent> idKeyAndInfo = new ConcurrentHashMap<>();
+        for (var fileContent : fileAndParts.keySet()) {
+            idKeyAndInfo.put(fileContent.getIdFile(), fileContent);
         }
+        logger.info("Get list");
 
-        UploadAnswer fileInfo = idKeyAndInfo.get(idFile);
-
+        FileContent fileInfo = idKeyAndInfo.get(idFile);
+        logger.info("Get fileInfo");
         FileContent fileContent = FileContent.newBuilder()
-                .setSizeFile(fileInfo.getSize())
+                .setSizeFile(fileInfo.getSizeFile())
                 .setIdFile(fileInfo.getIdFile())
                 .setFilename(fileInfo.getFilename())
                 .build();
         byte[] contentOfPart = FileSplitter.getContentFromPart(fileInfo, partNumber);
-//
+
         var getAnswer = GetAnswer.newBuilder()
                 .setContent(ByteString.copyFrom(contentOfPart))
                 .setFileContent(fileContent)

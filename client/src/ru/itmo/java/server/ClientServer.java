@@ -1,8 +1,6 @@
 package ru.itmo.java.server;
 
-import ru.itmo.java.message.torrent.Constants;
-import ru.itmo.java.message.torrent.UploadAnswer;
-
+import ru.itmo.java.message.torrent.FileContent;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -15,10 +13,10 @@ import java.util.logging.Logger;
 public class ClientServer implements Runnable {
     private final ExecutorService readPool = Executors.newCachedThreadPool();
     Logger logger = Logger.getLogger(ClientServer.class.getName());
-    ConcurrentHashMap<UploadAnswer, List<Long>>  distributedFiles;
+    ConcurrentHashMap<FileContent, List<Long>>  distributedFiles;
     ServerSocket serverSocket;
 
-    public ClientServer(ConcurrentHashMap<UploadAnswer, List<Long>>  distributedFiles, ServerSocket serverSocket){
+    public ClientServer(ConcurrentHashMap<FileContent, List<Long>>  distributedFiles, ServerSocket serverSocket){
         this.distributedFiles = distributedFiles;
         this.serverSocket = serverSocket;
     };
@@ -39,5 +37,10 @@ public class ClientServer implements Runnable {
 
     public void shutdownTracker() {
         readPool.shutdown();
+        try {
+            serverSocket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

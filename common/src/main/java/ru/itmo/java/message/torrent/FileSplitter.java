@@ -17,7 +17,7 @@ public class FileSplitter {
         return listOfParts;
     }
 
-    public static byte[] getContentFromPart(UploadAnswer fileInfo, Long partId) {
+    public static byte[] getContentFromPart(FileContent fileInfo, Long partId) {
         byte[] content = new byte[0];
         try {
             RandomAccessFile file = new RandomAccessFile(fileInfo.getFilename(), "r");
@@ -26,8 +26,8 @@ public class FileSplitter {
             System.out.println("startBlock:");
             System.out.println(startBlock);
             long endBlock = startBlock + Constants.FILE_PART_SIZE;
-            if (endBlock > fileInfo.getSize()) {
-                endBlock = fileInfo.getSize();
+            if (endBlock > fileInfo.getSizeFile()) {
+                endBlock = fileInfo.getSizeFile();
             }
             content = new byte[(int) (endBlock - startBlock)];
             file.readFully(content);
@@ -45,7 +45,7 @@ public class FileSplitter {
         if (endBlock > fileInfo.getSizeFile()) {
             endBlock = fileInfo.getSizeFile();
         }
-        String path = "client/resources/" + fileInfo.getIdFile();
+        String path = "client/testResources/" + fileInfo.getIdFile();
 
         RandomAccessFile file = new RandomAccessFile(path, "rw");
         file.setLength(fileInfo.getSizeFile());

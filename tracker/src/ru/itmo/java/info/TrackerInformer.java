@@ -62,10 +62,10 @@ public class TrackerInformer {
 
     public FileContent uploadFile(UploadRequest request, UserInfo userInfo) {
 //        lock.lock();
-        FileContent fileInfo;
+//        FileContent fileInfo;
 //        try {
         long idFile = currentId.incrementAndGet();
-        fileInfo = FileContent.newBuilder()
+        FileContent fileInfo = FileContent.newBuilder()
                 .setIdFile(idFile)
                 .setFilename(request.getFilename())
                 .setSizeFile(request.getSize())
@@ -90,7 +90,7 @@ public class TrackerInformer {
     }
 
     public UpdateAnswer updateList(UpdateRequest request, UserInfo userInfo) {
-        List<UploadAnswer> uploadAnswers = request.getUploadAnswerList();
+        List<FileContent> uploadAnswers = request.getFileContentList();
         lock.lock();
         try {
             userAndTime.put(userInfo, System.currentTimeMillis());
@@ -99,7 +99,7 @@ public class TrackerInformer {
                 FileContent fileContent = FileContent.newBuilder()
                         .setIdFile(uploadAnswer.getIdFile())
                         .setFilename(uploadAnswer.getFilename())
-                        .setSizeFile(uploadAnswer.getSize())
+                        .setSizeFile(uploadAnswer.getSizeFile())
                         .build();
                 idFileAndInfo.put(uploadAnswer.getIdFile(), fileContent);
 

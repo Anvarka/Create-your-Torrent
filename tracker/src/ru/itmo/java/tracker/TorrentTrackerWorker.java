@@ -68,9 +68,7 @@ public class TorrentTrackerWorker implements Runnable, AutoCloseable {
         logger.info("Get UploadRequest");
         FileContent fileInfo = trackerInformer.uploadFile(uploadRequest, client);
         var uploadAnswer = UploadAnswer.newBuilder()
-                .setIdFile(fileInfo.getIdFile())
-                .setFilename(fileInfo.getFilename())
-                .setSize(fileInfo.getSizeFile())
+                .setFileContent(fileInfo)
                 .build();
         return () -> ResponseFromTracker.newBuilder()
                 .setUploadAnswer(uploadAnswer)

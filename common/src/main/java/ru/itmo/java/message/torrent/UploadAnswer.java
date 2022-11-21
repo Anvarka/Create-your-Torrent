@@ -16,7 +16,6 @@ private static final long serialVersionUID = 0L;
     super(builder);
   }
   private UploadAnswer() {
-    filename_ = "";
   }
 
   @java.lang.Override
@@ -49,20 +48,17 @@ private static final long serialVersionUID = 0L;
           case 0:
             done = true;
             break;
-          case 8: {
+          case 10: {
+            ru.itmo.java.message.torrent.FileContent.Builder subBuilder = null;
+            if (fileContent_ != null) {
+              subBuilder = fileContent_.toBuilder();
+            }
+            fileContent_ = input.readMessage(ru.itmo.java.message.torrent.FileContent.parser(), extensionRegistry);
+            if (subBuilder != null) {
+              subBuilder.mergeFrom(fileContent_);
+              fileContent_ = subBuilder.buildPartial();
+            }
 
-            idFile_ = input.readInt64();
-            break;
-          }
-          case 18: {
-            java.lang.String s = input.readStringRequireUtf8();
-
-            filename_ = s;
-            break;
-          }
-          case 24: {
-
-            size_ = input.readInt64();
             break;
           }
           default: {
@@ -97,64 +93,30 @@ private static final long serialVersionUID = 0L;
             ru.itmo.java.message.torrent.UploadAnswer.class, ru.itmo.java.message.torrent.UploadAnswer.Builder.class);
   }
 
-  public static final int IDFILE_FIELD_NUMBER = 1;
-  private long idFile_;
+  public static final int FILECONTENT_FIELD_NUMBER = 1;
+  private ru.itmo.java.message.torrent.FileContent fileContent_;
   /**
-   * <code>int64 idFile = 1;</code>
-   * @return The idFile.
+   * <code>.ru.itmo.java.message.torrent.FileContent fileContent = 1;</code>
+   * @return Whether the fileContent field is set.
    */
   @java.lang.Override
-  public long getIdFile() {
-    return idFile_;
-  }
-
-  public static final int FILENAME_FIELD_NUMBER = 2;
-  private volatile java.lang.Object filename_;
-  /**
-   * <code>string filename = 2;</code>
-   * @return The filename.
-   */
-  @java.lang.Override
-  public java.lang.String getFilename() {
-    java.lang.Object ref = filename_;
-    if (ref instanceof java.lang.String) {
-      return (java.lang.String) ref;
-    } else {
-      com.google.protobuf.ByteString bs = 
-          (com.google.protobuf.ByteString) ref;
-      java.lang.String s = bs.toStringUtf8();
-      filename_ = s;
-      return s;
-    }
+  public boolean hasFileContent() {
+    return fileContent_ != null;
   }
   /**
-   * <code>string filename = 2;</code>
-   * @return The bytes for filename.
+   * <code>.ru.itmo.java.message.torrent.FileContent fileContent = 1;</code>
+   * @return The fileContent.
    */
   @java.lang.Override
-  public com.google.protobuf.ByteString
-      getFilenameBytes() {
-    java.lang.Object ref = filename_;
-    if (ref instanceof java.lang.String) {
-      com.google.protobuf.ByteString b = 
-          com.google.protobuf.ByteString.copyFromUtf8(
-              (java.lang.String) ref);
-      filename_ = b;
-      return b;
-    } else {
-      return (com.google.protobuf.ByteString) ref;
-    }
+  public ru.itmo.java.message.torrent.FileContent getFileContent() {
+    return fileContent_ == null ? ru.itmo.java.message.torrent.FileContent.getDefaultInstance() : fileContent_;
   }
-
-  public static final int SIZE_FIELD_NUMBER = 3;
-  private long size_;
   /**
-   * <code>int64 size = 3;</code>
-   * @return The size.
+   * <code>.ru.itmo.java.message.torrent.FileContent fileContent = 1;</code>
    */
   @java.lang.Override
-  public long getSize() {
-    return size_;
+  public ru.itmo.java.message.torrent.FileContentOrBuilder getFileContentOrBuilder() {
+    return getFileContent();
   }
 
   private byte memoizedIsInitialized = -1;
@@ -171,14 +133,8 @@ private static final long serialVersionUID = 0L;
   @java.lang.Override
   public void writeTo(com.google.protobuf.CodedOutputStream output)
                       throws java.io.IOException {
-    if (idFile_ != 0L) {
-      output.writeInt64(1, idFile_);
-    }
-    if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(filename_)) {
-      com.google.protobuf.GeneratedMessageV3.writeString(output, 2, filename_);
-    }
-    if (size_ != 0L) {
-      output.writeInt64(3, size_);
+    if (fileContent_ != null) {
+      output.writeMessage(1, getFileContent());
     }
     unknownFields.writeTo(output);
   }
@@ -189,16 +145,9 @@ private static final long serialVersionUID = 0L;
     if (size != -1) return size;
 
     size = 0;
-    if (idFile_ != 0L) {
+    if (fileContent_ != null) {
       size += com.google.protobuf.CodedOutputStream
-        .computeInt64Size(1, idFile_);
-    }
-    if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(filename_)) {
-      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, filename_);
-    }
-    if (size_ != 0L) {
-      size += com.google.protobuf.CodedOutputStream
-        .computeInt64Size(3, size_);
+        .computeMessageSize(1, getFileContent());
     }
     size += unknownFields.getSerializedSize();
     memoizedSize = size;
@@ -215,12 +164,11 @@ private static final long serialVersionUID = 0L;
     }
     ru.itmo.java.message.torrent.UploadAnswer other = (ru.itmo.java.message.torrent.UploadAnswer) obj;
 
-    if (getIdFile()
-        != other.getIdFile()) return false;
-    if (!getFilename()
-        .equals(other.getFilename())) return false;
-    if (getSize()
-        != other.getSize()) return false;
+    if (hasFileContent() != other.hasFileContent()) return false;
+    if (hasFileContent()) {
+      if (!getFileContent()
+          .equals(other.getFileContent())) return false;
+    }
     if (!unknownFields.equals(other.unknownFields)) return false;
     return true;
   }
@@ -232,14 +180,10 @@ private static final long serialVersionUID = 0L;
     }
     int hash = 41;
     hash = (19 * hash) + getDescriptor().hashCode();
-    hash = (37 * hash) + IDFILE_FIELD_NUMBER;
-    hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
-        getIdFile());
-    hash = (37 * hash) + FILENAME_FIELD_NUMBER;
-    hash = (53 * hash) + getFilename().hashCode();
-    hash = (37 * hash) + SIZE_FIELD_NUMBER;
-    hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
-        getSize());
+    if (hasFileContent()) {
+      hash = (37 * hash) + FILECONTENT_FIELD_NUMBER;
+      hash = (53 * hash) + getFileContent().hashCode();
+    }
     hash = (29 * hash) + unknownFields.hashCode();
     memoizedHashCode = hash;
     return hash;
@@ -373,12 +317,12 @@ private static final long serialVersionUID = 0L;
     @java.lang.Override
     public Builder clear() {
       super.clear();
-      idFile_ = 0L;
-
-      filename_ = "";
-
-      size_ = 0L;
-
+      if (fileContentBuilder_ == null) {
+        fileContent_ = null;
+      } else {
+        fileContent_ = null;
+        fileContentBuilder_ = null;
+      }
       return this;
     }
 
@@ -405,9 +349,11 @@ private static final long serialVersionUID = 0L;
     @java.lang.Override
     public ru.itmo.java.message.torrent.UploadAnswer buildPartial() {
       ru.itmo.java.message.torrent.UploadAnswer result = new ru.itmo.java.message.torrent.UploadAnswer(this);
-      result.idFile_ = idFile_;
-      result.filename_ = filename_;
-      result.size_ = size_;
+      if (fileContentBuilder_ == null) {
+        result.fileContent_ = fileContent_;
+      } else {
+        result.fileContent_ = fileContentBuilder_.build();
+      }
       onBuilt();
       return result;
     }
@@ -456,15 +402,8 @@ private static final long serialVersionUID = 0L;
 
     public Builder mergeFrom(ru.itmo.java.message.torrent.UploadAnswer other) {
       if (other == ru.itmo.java.message.torrent.UploadAnswer.getDefaultInstance()) return this;
-      if (other.getIdFile() != 0L) {
-        setIdFile(other.getIdFile());
-      }
-      if (!other.getFilename().isEmpty()) {
-        filename_ = other.filename_;
-        onChanged();
-      }
-      if (other.getSize() != 0L) {
-        setSize(other.getSize());
+      if (other.hasFileContent()) {
+        mergeFileContent(other.getFileContent());
       }
       this.mergeUnknownFields(other.unknownFields);
       onChanged();
@@ -495,142 +434,123 @@ private static final long serialVersionUID = 0L;
       return this;
     }
 
-    private long idFile_ ;
+    private ru.itmo.java.message.torrent.FileContent fileContent_;
+    private com.google.protobuf.SingleFieldBuilderV3<
+        ru.itmo.java.message.torrent.FileContent, ru.itmo.java.message.torrent.FileContent.Builder, ru.itmo.java.message.torrent.FileContentOrBuilder> fileContentBuilder_;
     /**
-     * <code>int64 idFile = 1;</code>
-     * @return The idFile.
+     * <code>.ru.itmo.java.message.torrent.FileContent fileContent = 1;</code>
+     * @return Whether the fileContent field is set.
      */
-    @java.lang.Override
-    public long getIdFile() {
-      return idFile_;
+    public boolean hasFileContent() {
+      return fileContentBuilder_ != null || fileContent_ != null;
     }
     /**
-     * <code>int64 idFile = 1;</code>
-     * @param value The idFile to set.
-     * @return This builder for chaining.
+     * <code>.ru.itmo.java.message.torrent.FileContent fileContent = 1;</code>
+     * @return The fileContent.
      */
-    public Builder setIdFile(long value) {
-      
-      idFile_ = value;
-      onChanged();
-      return this;
-    }
-    /**
-     * <code>int64 idFile = 1;</code>
-     * @return This builder for chaining.
-     */
-    public Builder clearIdFile() {
-      
-      idFile_ = 0L;
-      onChanged();
-      return this;
-    }
-
-    private java.lang.Object filename_ = "";
-    /**
-     * <code>string filename = 2;</code>
-     * @return The filename.
-     */
-    public java.lang.String getFilename() {
-      java.lang.Object ref = filename_;
-      if (!(ref instanceof java.lang.String)) {
-        com.google.protobuf.ByteString bs =
-            (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
-        filename_ = s;
-        return s;
+    public ru.itmo.java.message.torrent.FileContent getFileContent() {
+      if (fileContentBuilder_ == null) {
+        return fileContent_ == null ? ru.itmo.java.message.torrent.FileContent.getDefaultInstance() : fileContent_;
       } else {
-        return (java.lang.String) ref;
+        return fileContentBuilder_.getMessage();
       }
     }
     /**
-     * <code>string filename = 2;</code>
-     * @return The bytes for filename.
+     * <code>.ru.itmo.java.message.torrent.FileContent fileContent = 1;</code>
      */
-    public com.google.protobuf.ByteString
-        getFilenameBytes() {
-      java.lang.Object ref = filename_;
-      if (ref instanceof String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
-        filename_ = b;
-        return b;
+    public Builder setFileContent(ru.itmo.java.message.torrent.FileContent value) {
+      if (fileContentBuilder_ == null) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        fileContent_ = value;
+        onChanged();
       } else {
-        return (com.google.protobuf.ByteString) ref;
+        fileContentBuilder_.setMessage(value);
+      }
+
+      return this;
+    }
+    /**
+     * <code>.ru.itmo.java.message.torrent.FileContent fileContent = 1;</code>
+     */
+    public Builder setFileContent(
+        ru.itmo.java.message.torrent.FileContent.Builder builderForValue) {
+      if (fileContentBuilder_ == null) {
+        fileContent_ = builderForValue.build();
+        onChanged();
+      } else {
+        fileContentBuilder_.setMessage(builderForValue.build());
+      }
+
+      return this;
+    }
+    /**
+     * <code>.ru.itmo.java.message.torrent.FileContent fileContent = 1;</code>
+     */
+    public Builder mergeFileContent(ru.itmo.java.message.torrent.FileContent value) {
+      if (fileContentBuilder_ == null) {
+        if (fileContent_ != null) {
+          fileContent_ =
+            ru.itmo.java.message.torrent.FileContent.newBuilder(fileContent_).mergeFrom(value).buildPartial();
+        } else {
+          fileContent_ = value;
+        }
+        onChanged();
+      } else {
+        fileContentBuilder_.mergeFrom(value);
+      }
+
+      return this;
+    }
+    /**
+     * <code>.ru.itmo.java.message.torrent.FileContent fileContent = 1;</code>
+     */
+    public Builder clearFileContent() {
+      if (fileContentBuilder_ == null) {
+        fileContent_ = null;
+        onChanged();
+      } else {
+        fileContent_ = null;
+        fileContentBuilder_ = null;
+      }
+
+      return this;
+    }
+    /**
+     * <code>.ru.itmo.java.message.torrent.FileContent fileContent = 1;</code>
+     */
+    public ru.itmo.java.message.torrent.FileContent.Builder getFileContentBuilder() {
+      
+      onChanged();
+      return getFileContentFieldBuilder().getBuilder();
+    }
+    /**
+     * <code>.ru.itmo.java.message.torrent.FileContent fileContent = 1;</code>
+     */
+    public ru.itmo.java.message.torrent.FileContentOrBuilder getFileContentOrBuilder() {
+      if (fileContentBuilder_ != null) {
+        return fileContentBuilder_.getMessageOrBuilder();
+      } else {
+        return fileContent_ == null ?
+            ru.itmo.java.message.torrent.FileContent.getDefaultInstance() : fileContent_;
       }
     }
     /**
-     * <code>string filename = 2;</code>
-     * @param value The filename to set.
-     * @return This builder for chaining.
+     * <code>.ru.itmo.java.message.torrent.FileContent fileContent = 1;</code>
      */
-    public Builder setFilename(
-        java.lang.String value) {
-      if (value == null) {
-    throw new NullPointerException();
-  }
-  
-      filename_ = value;
-      onChanged();
-      return this;
-    }
-    /**
-     * <code>string filename = 2;</code>
-     * @return This builder for chaining.
-     */
-    public Builder clearFilename() {
-      
-      filename_ = getDefaultInstance().getFilename();
-      onChanged();
-      return this;
-    }
-    /**
-     * <code>string filename = 2;</code>
-     * @param value The bytes for filename to set.
-     * @return This builder for chaining.
-     */
-    public Builder setFilenameBytes(
-        com.google.protobuf.ByteString value) {
-      if (value == null) {
-    throw new NullPointerException();
-  }
-  checkByteStringIsUtf8(value);
-      
-      filename_ = value;
-      onChanged();
-      return this;
-    }
-
-    private long size_ ;
-    /**
-     * <code>int64 size = 3;</code>
-     * @return The size.
-     */
-    @java.lang.Override
-    public long getSize() {
-      return size_;
-    }
-    /**
-     * <code>int64 size = 3;</code>
-     * @param value The size to set.
-     * @return This builder for chaining.
-     */
-    public Builder setSize(long value) {
-      
-      size_ = value;
-      onChanged();
-      return this;
-    }
-    /**
-     * <code>int64 size = 3;</code>
-     * @return This builder for chaining.
-     */
-    public Builder clearSize() {
-      
-      size_ = 0L;
-      onChanged();
-      return this;
+    private com.google.protobuf.SingleFieldBuilderV3<
+        ru.itmo.java.message.torrent.FileContent, ru.itmo.java.message.torrent.FileContent.Builder, ru.itmo.java.message.torrent.FileContentOrBuilder> 
+        getFileContentFieldBuilder() {
+      if (fileContentBuilder_ == null) {
+        fileContentBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+            ru.itmo.java.message.torrent.FileContent, ru.itmo.java.message.torrent.FileContent.Builder, ru.itmo.java.message.torrent.FileContentOrBuilder>(
+                getFileContent(),
+                getParentForChildren(),
+                isClean());
+        fileContent_ = null;
+      }
+      return fileContentBuilder_;
     }
     @java.lang.Override
     public final Builder setUnknownFields(

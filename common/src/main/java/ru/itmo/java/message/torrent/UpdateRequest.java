@@ -16,7 +16,7 @@ private static final long serialVersionUID = 0L;
     super(builder);
   }
   private UpdateRequest() {
-    uploadAnswer_ = java.util.Collections.emptyList();
+    fileContent_ = java.util.Collections.emptyList();
   }
 
   @java.lang.Override
@@ -75,11 +75,11 @@ private static final long serialVersionUID = 0L;
           }
           case 34: {
             if (!((mutable_bitField0_ & 0x00000001) != 0)) {
-              uploadAnswer_ = new java.util.ArrayList<ru.itmo.java.message.torrent.UploadAnswer>();
+              fileContent_ = new java.util.ArrayList<ru.itmo.java.message.torrent.FileContent>();
               mutable_bitField0_ |= 0x00000001;
             }
-            uploadAnswer_.add(
-                input.readMessage(ru.itmo.java.message.torrent.UploadAnswer.parser(), extensionRegistry));
+            fileContent_.add(
+                input.readMessage(ru.itmo.java.message.torrent.FileContent.parser(), extensionRegistry));
             break;
           }
           default: {
@@ -98,7 +98,7 @@ private static final long serialVersionUID = 0L;
           e).setUnfinishedMessage(this);
     } finally {
       if (((mutable_bitField0_ & 0x00000001) != 0)) {
-        uploadAnswer_ = java.util.Collections.unmodifiableList(uploadAnswer_);
+        fileContent_ = java.util.Collections.unmodifiableList(fileContent_);
       }
       this.unknownFields = unknownFields.build();
       makeExtensionsImmutable();
@@ -165,44 +165,44 @@ private static final long serialVersionUID = 0L;
     return countSharedFiles_;
   }
 
-  public static final int UPLOADANSWER_FIELD_NUMBER = 4;
-  private java.util.List<ru.itmo.java.message.torrent.UploadAnswer> uploadAnswer_;
+  public static final int FILECONTENT_FIELD_NUMBER = 4;
+  private java.util.List<ru.itmo.java.message.torrent.FileContent> fileContent_;
   /**
-   * <code>repeated .ru.itmo.java.message.torrent.UploadAnswer uploadAnswer = 4;</code>
+   * <code>repeated .ru.itmo.java.message.torrent.FileContent fileContent = 4;</code>
    */
   @java.lang.Override
-  public java.util.List<ru.itmo.java.message.torrent.UploadAnswer> getUploadAnswerList() {
-    return uploadAnswer_;
+  public java.util.List<ru.itmo.java.message.torrent.FileContent> getFileContentList() {
+    return fileContent_;
   }
   /**
-   * <code>repeated .ru.itmo.java.message.torrent.UploadAnswer uploadAnswer = 4;</code>
+   * <code>repeated .ru.itmo.java.message.torrent.FileContent fileContent = 4;</code>
    */
   @java.lang.Override
-  public java.util.List<? extends ru.itmo.java.message.torrent.UploadAnswerOrBuilder> 
-      getUploadAnswerOrBuilderList() {
-    return uploadAnswer_;
+  public java.util.List<? extends ru.itmo.java.message.torrent.FileContentOrBuilder> 
+      getFileContentOrBuilderList() {
+    return fileContent_;
   }
   /**
-   * <code>repeated .ru.itmo.java.message.torrent.UploadAnswer uploadAnswer = 4;</code>
+   * <code>repeated .ru.itmo.java.message.torrent.FileContent fileContent = 4;</code>
    */
   @java.lang.Override
-  public int getUploadAnswerCount() {
-    return uploadAnswer_.size();
+  public int getFileContentCount() {
+    return fileContent_.size();
   }
   /**
-   * <code>repeated .ru.itmo.java.message.torrent.UploadAnswer uploadAnswer = 4;</code>
+   * <code>repeated .ru.itmo.java.message.torrent.FileContent fileContent = 4;</code>
    */
   @java.lang.Override
-  public ru.itmo.java.message.torrent.UploadAnswer getUploadAnswer(int index) {
-    return uploadAnswer_.get(index);
+  public ru.itmo.java.message.torrent.FileContent getFileContent(int index) {
+    return fileContent_.get(index);
   }
   /**
-   * <code>repeated .ru.itmo.java.message.torrent.UploadAnswer uploadAnswer = 4;</code>
+   * <code>repeated .ru.itmo.java.message.torrent.FileContent fileContent = 4;</code>
    */
   @java.lang.Override
-  public ru.itmo.java.message.torrent.UploadAnswerOrBuilder getUploadAnswerOrBuilder(
+  public ru.itmo.java.message.torrent.FileContentOrBuilder getFileContentOrBuilder(
       int index) {
-    return uploadAnswer_.get(index);
+    return fileContent_.get(index);
   }
 
   private byte memoizedIsInitialized = -1;
@@ -228,8 +228,8 @@ private static final long serialVersionUID = 0L;
     if (countSharedFiles_ != 0L) {
       output.writeInt64(3, countSharedFiles_);
     }
-    for (int i = 0; i < uploadAnswer_.size(); i++) {
-      output.writeMessage(4, uploadAnswer_.get(i));
+    for (int i = 0; i < fileContent_.size(); i++) {
+      output.writeMessage(4, fileContent_.get(i));
     }
     unknownFields.writeTo(output);
   }
@@ -252,9 +252,9 @@ private static final long serialVersionUID = 0L;
       size += com.google.protobuf.CodedOutputStream
         .computeInt64Size(3, countSharedFiles_);
     }
-    for (int i = 0; i < uploadAnswer_.size(); i++) {
+    for (int i = 0; i < fileContent_.size(); i++) {
       size += com.google.protobuf.CodedOutputStream
-        .computeMessageSize(4, uploadAnswer_.get(i));
+        .computeMessageSize(4, fileContent_.get(i));
     }
     size += unknownFields.getSerializedSize();
     memoizedSize = size;
@@ -280,8 +280,8 @@ private static final long serialVersionUID = 0L;
         != other.getPortOfClientServer()) return false;
     if (getCountSharedFiles()
         != other.getCountSharedFiles()) return false;
-    if (!getUploadAnswerList()
-        .equals(other.getUploadAnswerList())) return false;
+    if (!getFileContentList()
+        .equals(other.getFileContentList())) return false;
     if (!unknownFields.equals(other.unknownFields)) return false;
     return true;
   }
@@ -302,9 +302,9 @@ private static final long serialVersionUID = 0L;
     hash = (37 * hash) + COUNTSHAREDFILES_FIELD_NUMBER;
     hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
         getCountSharedFiles());
-    if (getUploadAnswerCount() > 0) {
-      hash = (37 * hash) + UPLOADANSWER_FIELD_NUMBER;
-      hash = (53 * hash) + getUploadAnswerList().hashCode();
+    if (getFileContentCount() > 0) {
+      hash = (37 * hash) + FILECONTENT_FIELD_NUMBER;
+      hash = (53 * hash) + getFileContentList().hashCode();
     }
     hash = (29 * hash) + unknownFields.hashCode();
     memoizedHashCode = hash;
@@ -434,7 +434,7 @@ private static final long serialVersionUID = 0L;
     private void maybeForceBuilderInitialization() {
       if (com.google.protobuf.GeneratedMessageV3
               .alwaysUseFieldBuilders) {
-        getUploadAnswerFieldBuilder();
+        getFileContentFieldBuilder();
       }
     }
     @java.lang.Override
@@ -450,11 +450,11 @@ private static final long serialVersionUID = 0L;
 
       countSharedFiles_ = 0L;
 
-      if (uploadAnswerBuilder_ == null) {
-        uploadAnswer_ = java.util.Collections.emptyList();
+      if (fileContentBuilder_ == null) {
+        fileContent_ = java.util.Collections.emptyList();
         bitField0_ = (bitField0_ & ~0x00000001);
       } else {
-        uploadAnswerBuilder_.clear();
+        fileContentBuilder_.clear();
       }
       return this;
     }
@@ -490,14 +490,14 @@ private static final long serialVersionUID = 0L;
       }
       result.portOfClientServer_ = portOfClientServer_;
       result.countSharedFiles_ = countSharedFiles_;
-      if (uploadAnswerBuilder_ == null) {
+      if (fileContentBuilder_ == null) {
         if (((bitField0_ & 0x00000001) != 0)) {
-          uploadAnswer_ = java.util.Collections.unmodifiableList(uploadAnswer_);
+          fileContent_ = java.util.Collections.unmodifiableList(fileContent_);
           bitField0_ = (bitField0_ & ~0x00000001);
         }
-        result.uploadAnswer_ = uploadAnswer_;
+        result.fileContent_ = fileContent_;
       } else {
-        result.uploadAnswer_ = uploadAnswerBuilder_.build();
+        result.fileContent_ = fileContentBuilder_.build();
       }
       onBuilt();
       return result;
@@ -556,29 +556,29 @@ private static final long serialVersionUID = 0L;
       if (other.getCountSharedFiles() != 0L) {
         setCountSharedFiles(other.getCountSharedFiles());
       }
-      if (uploadAnswerBuilder_ == null) {
-        if (!other.uploadAnswer_.isEmpty()) {
-          if (uploadAnswer_.isEmpty()) {
-            uploadAnswer_ = other.uploadAnswer_;
+      if (fileContentBuilder_ == null) {
+        if (!other.fileContent_.isEmpty()) {
+          if (fileContent_.isEmpty()) {
+            fileContent_ = other.fileContent_;
             bitField0_ = (bitField0_ & ~0x00000001);
           } else {
-            ensureUploadAnswerIsMutable();
-            uploadAnswer_.addAll(other.uploadAnswer_);
+            ensureFileContentIsMutable();
+            fileContent_.addAll(other.fileContent_);
           }
           onChanged();
         }
       } else {
-        if (!other.uploadAnswer_.isEmpty()) {
-          if (uploadAnswerBuilder_.isEmpty()) {
-            uploadAnswerBuilder_.dispose();
-            uploadAnswerBuilder_ = null;
-            uploadAnswer_ = other.uploadAnswer_;
+        if (!other.fileContent_.isEmpty()) {
+          if (fileContentBuilder_.isEmpty()) {
+            fileContentBuilder_.dispose();
+            fileContentBuilder_ = null;
+            fileContent_ = other.fileContent_;
             bitField0_ = (bitField0_ & ~0x00000001);
-            uploadAnswerBuilder_ = 
+            fileContentBuilder_ = 
               com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders ?
-                 getUploadAnswerFieldBuilder() : null;
+                 getFileContentFieldBuilder() : null;
           } else {
-            uploadAnswerBuilder_.addAllMessages(other.uploadAnswer_);
+            fileContentBuilder_.addAllMessages(other.fileContent_);
           }
         }
       }
@@ -793,244 +793,244 @@ private static final long serialVersionUID = 0L;
       return this;
     }
 
-    private java.util.List<ru.itmo.java.message.torrent.UploadAnswer> uploadAnswer_ =
+    private java.util.List<ru.itmo.java.message.torrent.FileContent> fileContent_ =
       java.util.Collections.emptyList();
-    private void ensureUploadAnswerIsMutable() {
+    private void ensureFileContentIsMutable() {
       if (!((bitField0_ & 0x00000001) != 0)) {
-        uploadAnswer_ = new java.util.ArrayList<ru.itmo.java.message.torrent.UploadAnswer>(uploadAnswer_);
+        fileContent_ = new java.util.ArrayList<ru.itmo.java.message.torrent.FileContent>(fileContent_);
         bitField0_ |= 0x00000001;
        }
     }
 
     private com.google.protobuf.RepeatedFieldBuilderV3<
-        ru.itmo.java.message.torrent.UploadAnswer, ru.itmo.java.message.torrent.UploadAnswer.Builder, ru.itmo.java.message.torrent.UploadAnswerOrBuilder> uploadAnswerBuilder_;
+        ru.itmo.java.message.torrent.FileContent, ru.itmo.java.message.torrent.FileContent.Builder, ru.itmo.java.message.torrent.FileContentOrBuilder> fileContentBuilder_;
 
     /**
-     * <code>repeated .ru.itmo.java.message.torrent.UploadAnswer uploadAnswer = 4;</code>
+     * <code>repeated .ru.itmo.java.message.torrent.FileContent fileContent = 4;</code>
      */
-    public java.util.List<ru.itmo.java.message.torrent.UploadAnswer> getUploadAnswerList() {
-      if (uploadAnswerBuilder_ == null) {
-        return java.util.Collections.unmodifiableList(uploadAnswer_);
+    public java.util.List<ru.itmo.java.message.torrent.FileContent> getFileContentList() {
+      if (fileContentBuilder_ == null) {
+        return java.util.Collections.unmodifiableList(fileContent_);
       } else {
-        return uploadAnswerBuilder_.getMessageList();
+        return fileContentBuilder_.getMessageList();
       }
     }
     /**
-     * <code>repeated .ru.itmo.java.message.torrent.UploadAnswer uploadAnswer = 4;</code>
+     * <code>repeated .ru.itmo.java.message.torrent.FileContent fileContent = 4;</code>
      */
-    public int getUploadAnswerCount() {
-      if (uploadAnswerBuilder_ == null) {
-        return uploadAnswer_.size();
+    public int getFileContentCount() {
+      if (fileContentBuilder_ == null) {
+        return fileContent_.size();
       } else {
-        return uploadAnswerBuilder_.getCount();
+        return fileContentBuilder_.getCount();
       }
     }
     /**
-     * <code>repeated .ru.itmo.java.message.torrent.UploadAnswer uploadAnswer = 4;</code>
+     * <code>repeated .ru.itmo.java.message.torrent.FileContent fileContent = 4;</code>
      */
-    public ru.itmo.java.message.torrent.UploadAnswer getUploadAnswer(int index) {
-      if (uploadAnswerBuilder_ == null) {
-        return uploadAnswer_.get(index);
+    public ru.itmo.java.message.torrent.FileContent getFileContent(int index) {
+      if (fileContentBuilder_ == null) {
+        return fileContent_.get(index);
       } else {
-        return uploadAnswerBuilder_.getMessage(index);
+        return fileContentBuilder_.getMessage(index);
       }
     }
     /**
-     * <code>repeated .ru.itmo.java.message.torrent.UploadAnswer uploadAnswer = 4;</code>
+     * <code>repeated .ru.itmo.java.message.torrent.FileContent fileContent = 4;</code>
      */
-    public Builder setUploadAnswer(
-        int index, ru.itmo.java.message.torrent.UploadAnswer value) {
-      if (uploadAnswerBuilder_ == null) {
+    public Builder setFileContent(
+        int index, ru.itmo.java.message.torrent.FileContent value) {
+      if (fileContentBuilder_ == null) {
         if (value == null) {
           throw new NullPointerException();
         }
-        ensureUploadAnswerIsMutable();
-        uploadAnswer_.set(index, value);
+        ensureFileContentIsMutable();
+        fileContent_.set(index, value);
         onChanged();
       } else {
-        uploadAnswerBuilder_.setMessage(index, value);
+        fileContentBuilder_.setMessage(index, value);
       }
       return this;
     }
     /**
-     * <code>repeated .ru.itmo.java.message.torrent.UploadAnswer uploadAnswer = 4;</code>
+     * <code>repeated .ru.itmo.java.message.torrent.FileContent fileContent = 4;</code>
      */
-    public Builder setUploadAnswer(
-        int index, ru.itmo.java.message.torrent.UploadAnswer.Builder builderForValue) {
-      if (uploadAnswerBuilder_ == null) {
-        ensureUploadAnswerIsMutable();
-        uploadAnswer_.set(index, builderForValue.build());
+    public Builder setFileContent(
+        int index, ru.itmo.java.message.torrent.FileContent.Builder builderForValue) {
+      if (fileContentBuilder_ == null) {
+        ensureFileContentIsMutable();
+        fileContent_.set(index, builderForValue.build());
         onChanged();
       } else {
-        uploadAnswerBuilder_.setMessage(index, builderForValue.build());
+        fileContentBuilder_.setMessage(index, builderForValue.build());
       }
       return this;
     }
     /**
-     * <code>repeated .ru.itmo.java.message.torrent.UploadAnswer uploadAnswer = 4;</code>
+     * <code>repeated .ru.itmo.java.message.torrent.FileContent fileContent = 4;</code>
      */
-    public Builder addUploadAnswer(ru.itmo.java.message.torrent.UploadAnswer value) {
-      if (uploadAnswerBuilder_ == null) {
+    public Builder addFileContent(ru.itmo.java.message.torrent.FileContent value) {
+      if (fileContentBuilder_ == null) {
         if (value == null) {
           throw new NullPointerException();
         }
-        ensureUploadAnswerIsMutable();
-        uploadAnswer_.add(value);
+        ensureFileContentIsMutable();
+        fileContent_.add(value);
         onChanged();
       } else {
-        uploadAnswerBuilder_.addMessage(value);
+        fileContentBuilder_.addMessage(value);
       }
       return this;
     }
     /**
-     * <code>repeated .ru.itmo.java.message.torrent.UploadAnswer uploadAnswer = 4;</code>
+     * <code>repeated .ru.itmo.java.message.torrent.FileContent fileContent = 4;</code>
      */
-    public Builder addUploadAnswer(
-        int index, ru.itmo.java.message.torrent.UploadAnswer value) {
-      if (uploadAnswerBuilder_ == null) {
+    public Builder addFileContent(
+        int index, ru.itmo.java.message.torrent.FileContent value) {
+      if (fileContentBuilder_ == null) {
         if (value == null) {
           throw new NullPointerException();
         }
-        ensureUploadAnswerIsMutable();
-        uploadAnswer_.add(index, value);
+        ensureFileContentIsMutable();
+        fileContent_.add(index, value);
         onChanged();
       } else {
-        uploadAnswerBuilder_.addMessage(index, value);
+        fileContentBuilder_.addMessage(index, value);
       }
       return this;
     }
     /**
-     * <code>repeated .ru.itmo.java.message.torrent.UploadAnswer uploadAnswer = 4;</code>
+     * <code>repeated .ru.itmo.java.message.torrent.FileContent fileContent = 4;</code>
      */
-    public Builder addUploadAnswer(
-        ru.itmo.java.message.torrent.UploadAnswer.Builder builderForValue) {
-      if (uploadAnswerBuilder_ == null) {
-        ensureUploadAnswerIsMutable();
-        uploadAnswer_.add(builderForValue.build());
+    public Builder addFileContent(
+        ru.itmo.java.message.torrent.FileContent.Builder builderForValue) {
+      if (fileContentBuilder_ == null) {
+        ensureFileContentIsMutable();
+        fileContent_.add(builderForValue.build());
         onChanged();
       } else {
-        uploadAnswerBuilder_.addMessage(builderForValue.build());
+        fileContentBuilder_.addMessage(builderForValue.build());
       }
       return this;
     }
     /**
-     * <code>repeated .ru.itmo.java.message.torrent.UploadAnswer uploadAnswer = 4;</code>
+     * <code>repeated .ru.itmo.java.message.torrent.FileContent fileContent = 4;</code>
      */
-    public Builder addUploadAnswer(
-        int index, ru.itmo.java.message.torrent.UploadAnswer.Builder builderForValue) {
-      if (uploadAnswerBuilder_ == null) {
-        ensureUploadAnswerIsMutable();
-        uploadAnswer_.add(index, builderForValue.build());
+    public Builder addFileContent(
+        int index, ru.itmo.java.message.torrent.FileContent.Builder builderForValue) {
+      if (fileContentBuilder_ == null) {
+        ensureFileContentIsMutable();
+        fileContent_.add(index, builderForValue.build());
         onChanged();
       } else {
-        uploadAnswerBuilder_.addMessage(index, builderForValue.build());
+        fileContentBuilder_.addMessage(index, builderForValue.build());
       }
       return this;
     }
     /**
-     * <code>repeated .ru.itmo.java.message.torrent.UploadAnswer uploadAnswer = 4;</code>
+     * <code>repeated .ru.itmo.java.message.torrent.FileContent fileContent = 4;</code>
      */
-    public Builder addAllUploadAnswer(
-        java.lang.Iterable<? extends ru.itmo.java.message.torrent.UploadAnswer> values) {
-      if (uploadAnswerBuilder_ == null) {
-        ensureUploadAnswerIsMutable();
+    public Builder addAllFileContent(
+        java.lang.Iterable<? extends ru.itmo.java.message.torrent.FileContent> values) {
+      if (fileContentBuilder_ == null) {
+        ensureFileContentIsMutable();
         com.google.protobuf.AbstractMessageLite.Builder.addAll(
-            values, uploadAnswer_);
+            values, fileContent_);
         onChanged();
       } else {
-        uploadAnswerBuilder_.addAllMessages(values);
+        fileContentBuilder_.addAllMessages(values);
       }
       return this;
     }
     /**
-     * <code>repeated .ru.itmo.java.message.torrent.UploadAnswer uploadAnswer = 4;</code>
+     * <code>repeated .ru.itmo.java.message.torrent.FileContent fileContent = 4;</code>
      */
-    public Builder clearUploadAnswer() {
-      if (uploadAnswerBuilder_ == null) {
-        uploadAnswer_ = java.util.Collections.emptyList();
+    public Builder clearFileContent() {
+      if (fileContentBuilder_ == null) {
+        fileContent_ = java.util.Collections.emptyList();
         bitField0_ = (bitField0_ & ~0x00000001);
         onChanged();
       } else {
-        uploadAnswerBuilder_.clear();
+        fileContentBuilder_.clear();
       }
       return this;
     }
     /**
-     * <code>repeated .ru.itmo.java.message.torrent.UploadAnswer uploadAnswer = 4;</code>
+     * <code>repeated .ru.itmo.java.message.torrent.FileContent fileContent = 4;</code>
      */
-    public Builder removeUploadAnswer(int index) {
-      if (uploadAnswerBuilder_ == null) {
-        ensureUploadAnswerIsMutable();
-        uploadAnswer_.remove(index);
+    public Builder removeFileContent(int index) {
+      if (fileContentBuilder_ == null) {
+        ensureFileContentIsMutable();
+        fileContent_.remove(index);
         onChanged();
       } else {
-        uploadAnswerBuilder_.remove(index);
+        fileContentBuilder_.remove(index);
       }
       return this;
     }
     /**
-     * <code>repeated .ru.itmo.java.message.torrent.UploadAnswer uploadAnswer = 4;</code>
+     * <code>repeated .ru.itmo.java.message.torrent.FileContent fileContent = 4;</code>
      */
-    public ru.itmo.java.message.torrent.UploadAnswer.Builder getUploadAnswerBuilder(
+    public ru.itmo.java.message.torrent.FileContent.Builder getFileContentBuilder(
         int index) {
-      return getUploadAnswerFieldBuilder().getBuilder(index);
+      return getFileContentFieldBuilder().getBuilder(index);
     }
     /**
-     * <code>repeated .ru.itmo.java.message.torrent.UploadAnswer uploadAnswer = 4;</code>
+     * <code>repeated .ru.itmo.java.message.torrent.FileContent fileContent = 4;</code>
      */
-    public ru.itmo.java.message.torrent.UploadAnswerOrBuilder getUploadAnswerOrBuilder(
+    public ru.itmo.java.message.torrent.FileContentOrBuilder getFileContentOrBuilder(
         int index) {
-      if (uploadAnswerBuilder_ == null) {
-        return uploadAnswer_.get(index);  } else {
-        return uploadAnswerBuilder_.getMessageOrBuilder(index);
+      if (fileContentBuilder_ == null) {
+        return fileContent_.get(index);  } else {
+        return fileContentBuilder_.getMessageOrBuilder(index);
       }
     }
     /**
-     * <code>repeated .ru.itmo.java.message.torrent.UploadAnswer uploadAnswer = 4;</code>
+     * <code>repeated .ru.itmo.java.message.torrent.FileContent fileContent = 4;</code>
      */
-    public java.util.List<? extends ru.itmo.java.message.torrent.UploadAnswerOrBuilder> 
-         getUploadAnswerOrBuilderList() {
-      if (uploadAnswerBuilder_ != null) {
-        return uploadAnswerBuilder_.getMessageOrBuilderList();
+    public java.util.List<? extends ru.itmo.java.message.torrent.FileContentOrBuilder> 
+         getFileContentOrBuilderList() {
+      if (fileContentBuilder_ != null) {
+        return fileContentBuilder_.getMessageOrBuilderList();
       } else {
-        return java.util.Collections.unmodifiableList(uploadAnswer_);
+        return java.util.Collections.unmodifiableList(fileContent_);
       }
     }
     /**
-     * <code>repeated .ru.itmo.java.message.torrent.UploadAnswer uploadAnswer = 4;</code>
+     * <code>repeated .ru.itmo.java.message.torrent.FileContent fileContent = 4;</code>
      */
-    public ru.itmo.java.message.torrent.UploadAnswer.Builder addUploadAnswerBuilder() {
-      return getUploadAnswerFieldBuilder().addBuilder(
-          ru.itmo.java.message.torrent.UploadAnswer.getDefaultInstance());
+    public ru.itmo.java.message.torrent.FileContent.Builder addFileContentBuilder() {
+      return getFileContentFieldBuilder().addBuilder(
+          ru.itmo.java.message.torrent.FileContent.getDefaultInstance());
     }
     /**
-     * <code>repeated .ru.itmo.java.message.torrent.UploadAnswer uploadAnswer = 4;</code>
+     * <code>repeated .ru.itmo.java.message.torrent.FileContent fileContent = 4;</code>
      */
-    public ru.itmo.java.message.torrent.UploadAnswer.Builder addUploadAnswerBuilder(
+    public ru.itmo.java.message.torrent.FileContent.Builder addFileContentBuilder(
         int index) {
-      return getUploadAnswerFieldBuilder().addBuilder(
-          index, ru.itmo.java.message.torrent.UploadAnswer.getDefaultInstance());
+      return getFileContentFieldBuilder().addBuilder(
+          index, ru.itmo.java.message.torrent.FileContent.getDefaultInstance());
     }
     /**
-     * <code>repeated .ru.itmo.java.message.torrent.UploadAnswer uploadAnswer = 4;</code>
+     * <code>repeated .ru.itmo.java.message.torrent.FileContent fileContent = 4;</code>
      */
-    public java.util.List<ru.itmo.java.message.torrent.UploadAnswer.Builder> 
-         getUploadAnswerBuilderList() {
-      return getUploadAnswerFieldBuilder().getBuilderList();
+    public java.util.List<ru.itmo.java.message.torrent.FileContent.Builder> 
+         getFileContentBuilderList() {
+      return getFileContentFieldBuilder().getBuilderList();
     }
     private com.google.protobuf.RepeatedFieldBuilderV3<
-        ru.itmo.java.message.torrent.UploadAnswer, ru.itmo.java.message.torrent.UploadAnswer.Builder, ru.itmo.java.message.torrent.UploadAnswerOrBuilder> 
-        getUploadAnswerFieldBuilder() {
-      if (uploadAnswerBuilder_ == null) {
-        uploadAnswerBuilder_ = new com.google.protobuf.RepeatedFieldBuilderV3<
-            ru.itmo.java.message.torrent.UploadAnswer, ru.itmo.java.message.torrent.UploadAnswer.Builder, ru.itmo.java.message.torrent.UploadAnswerOrBuilder>(
-                uploadAnswer_,
+        ru.itmo.java.message.torrent.FileContent, ru.itmo.java.message.torrent.FileContent.Builder, ru.itmo.java.message.torrent.FileContentOrBuilder> 
+        getFileContentFieldBuilder() {
+      if (fileContentBuilder_ == null) {
+        fileContentBuilder_ = new com.google.protobuf.RepeatedFieldBuilderV3<
+            ru.itmo.java.message.torrent.FileContent, ru.itmo.java.message.torrent.FileContent.Builder, ru.itmo.java.message.torrent.FileContentOrBuilder>(
+                fileContent_,
                 ((bitField0_ & 0x00000001) != 0),
                 getParentForChildren(),
                 isClean());
-        uploadAnswer_ = null;
+        fileContent_ = null;
       }
-      return uploadAnswerBuilder_;
+      return fileContentBuilder_;
     }
     @java.lang.Override
     public final Builder setUnknownFields(

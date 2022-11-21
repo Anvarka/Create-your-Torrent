@@ -8,26 +8,17 @@ public interface UploadAnswerOrBuilder extends
     com.google.protobuf.MessageOrBuilder {
 
   /**
-   * <code>int64 idFile = 1;</code>
-   * @return The idFile.
+   * <code>.ru.itmo.java.message.torrent.FileContent fileContent = 1;</code>
+   * @return Whether the fileContent field is set.
    */
-  long getIdFile();
-
+  boolean hasFileContent();
   /**
-   * <code>string filename = 2;</code>
-   * @return The filename.
+   * <code>.ru.itmo.java.message.torrent.FileContent fileContent = 1;</code>
+   * @return The fileContent.
    */
-  java.lang.String getFilename();
+  ru.itmo.java.message.torrent.FileContent getFileContent();
   /**
-   * <code>string filename = 2;</code>
-   * @return The bytes for filename.
+   * <code>.ru.itmo.java.message.torrent.FileContent fileContent = 1;</code>
    */
-  com.google.protobuf.ByteString
-      getFilenameBytes();
-
-  /**
-   * <code>int64 size = 3;</code>
-   * @return The size.
-   */
-  long getSize();
+  ru.itmo.java.message.torrent.FileContentOrBuilder getFileContentOrBuilder();
 }

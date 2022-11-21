@@ -64,9 +64,7 @@ message UploadRequest {
 }
 
 message UploadAnswer {
-  int64 idFile = 1;
-  string filename = 2;
-  int64 size = 3;
+  FileContent fileContent = 1;
 }
 
 // Sources request
@@ -84,7 +82,7 @@ message UpdateRequest {
   UserInfo userInfo = 1;
   int32 portOfClientServer = 2;
   int64 countSharedFiles = 3;
-  repeated UploadAnswer uploadAnswer = 4;
+  repeated FileContent fileContent = 4;
 }
 
 message UpdateAnswer {

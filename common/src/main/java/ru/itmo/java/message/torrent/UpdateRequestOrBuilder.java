@@ -35,26 +35,26 @@ public interface UpdateRequestOrBuilder extends
   long getCountSharedFiles();
 
   /**
-   * <code>repeated .ru.itmo.java.message.torrent.UploadAnswer uploadAnswer = 4;</code>
+   * <code>repeated .ru.itmo.java.message.torrent.FileContent fileContent = 4;</code>
    */
-  java.util.List<ru.itmo.java.message.torrent.UploadAnswer> 
-      getUploadAnswerList();
+  java.util.List<ru.itmo.java.message.torrent.FileContent> 
+      getFileContentList();
   /**
-   * <code>repeated .ru.itmo.java.message.torrent.UploadAnswer uploadAnswer = 4;</code>
+   * <code>repeated .ru.itmo.java.message.torrent.FileContent fileContent = 4;</code>
    */
-  ru.itmo.java.message.torrent.UploadAnswer getUploadAnswer(int index);
+  ru.itmo.java.message.torrent.FileContent getFileContent(int index);
   /**
-   * <code>repeated .ru.itmo.java.message.torrent.UploadAnswer uploadAnswer = 4;</code>
+   * <code>repeated .ru.itmo.java.message.torrent.FileContent fileContent = 4;</code>
    */
-  int getUploadAnswerCount();
+  int getFileContentCount();
   /**
-   * <code>repeated .ru.itmo.java.message.torrent.UploadAnswer uploadAnswer = 4;</code>
+   * <code>repeated .ru.itmo.java.message.torrent.FileContent fileContent = 4;</code>
    */
-  java.util.List<? extends ru.itmo.java.message.torrent.UploadAnswerOrBuilder> 
-      getUploadAnswerOrBuilderList();
+  java.util.List<? extends ru.itmo.java.message.torrent.FileContentOrBuilder> 
+      getFileContentOrBuilderList();
   /**
-   * <code>repeated .ru.itmo.java.message.torrent.UploadAnswer uploadAnswer = 4;</code>
+   * <code>repeated .ru.itmo.java.message.torrent.FileContent fileContent = 4;</code>
    */
-  ru.itmo.java.message.torrent.UploadAnswerOrBuilder getUploadAnswerOrBuilder(
+  ru.itmo.java.message.torrent.FileContentOrBuilder getFileContentOrBuilder(
       int index);
 }
