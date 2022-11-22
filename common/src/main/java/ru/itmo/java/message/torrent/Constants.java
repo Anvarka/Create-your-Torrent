@@ -10,6 +10,7 @@ public class Constants {
     public static final String SETUP = "setup";
     public static final String CLIENT_STATE_PATH = "client/testResources/KeeperInformationAboutClient.txt";
     public static final String TRACKER_STATE_PATH = "tracker/testResources/TrackerState.txt";
+    public static final String SAVE_DIR = "client/testResources/";
 
     public static final long UPDATE_TIME_SLEEP = 30000;
     public static final long ALIVE_TIME_LIMIT = 50000;
