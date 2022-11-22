@@ -50,11 +50,6 @@ private static final long serialVersionUID = 0L;
           case 0:
             done = true;
             break;
-          case 8: {
-
-            countFile_ = input.readInt64();
-            break;
-          }
           case 18: {
             if (!((mutable_bitField0_ & 0x00000001) != 0)) {
               fileContent_ = new java.util.ArrayList<ru.itmo.java.message.torrent.FileContent>();
@@ -97,17 +92,6 @@ private static final long serialVersionUID = 0L;
     return ru.itmo.java.message.torrent.Torrent.internal_static_ru_itmo_java_message_torrent_ListAnswer_fieldAccessorTable
         .ensureFieldAccessorsInitialized(
             ru.itmo.java.message.torrent.ListAnswer.class, ru.itmo.java.message.torrent.ListAnswer.Builder.class);
-  }
-
-  public static final int COUNTFILE_FIELD_NUMBER = 1;
-  private long countFile_;
-  /**
-   * <code>int64 countFile = 1;</code>
-   * @return The countFile.
-   */
-  @java.lang.Override
-  public long getCountFile() {
-    return countFile_;
   }
 
   public static final int FILECONTENT_FIELD_NUMBER = 2;
@@ -164,9 +148,6 @@ private static final long serialVersionUID = 0L;
   @java.lang.Override
   public void writeTo(com.google.protobuf.CodedOutputStream output)
                       throws java.io.IOException {
-    if (countFile_ != 0L) {
-      output.writeInt64(1, countFile_);
-    }
     for (int i = 0; i < fileContent_.size(); i++) {
       output.writeMessage(2, fileContent_.get(i));
     }
@@ -179,10 +160,6 @@ private static final long serialVersionUID = 0L;
     if (size != -1) return size;
 
     size = 0;
-    if (countFile_ != 0L) {
-      size += com.google.protobuf.CodedOutputStream
-        .computeInt64Size(1, countFile_);
-    }
     for (int i = 0; i < fileContent_.size(); i++) {
       size += com.google.protobuf.CodedOutputStream
         .computeMessageSize(2, fileContent_.get(i));
@@ -202,8 +179,6 @@ private static final long serialVersionUID = 0L;
     }
     ru.itmo.java.message.torrent.ListAnswer other = (ru.itmo.java.message.torrent.ListAnswer) obj;
 
-    if (getCountFile()
-        != other.getCountFile()) return false;
     if (!getFileContentList()
         .equals(other.getFileContentList())) return false;
     if (!unknownFields.equals(other.unknownFields)) return false;
@@ -217,9 +192,6 @@ private static final long serialVersionUID = 0L;
     }
     int hash = 41;
     hash = (19 * hash) + getDescriptor().hashCode();
-    hash = (37 * hash) + COUNTFILE_FIELD_NUMBER;
-    hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
-        getCountFile());
     if (getFileContentCount() > 0) {
       hash = (37 * hash) + FILECONTENT_FIELD_NUMBER;
       hash = (53 * hash) + getFileContentList().hashCode();
@@ -358,8 +330,6 @@ private static final long serialVersionUID = 0L;
     @java.lang.Override
     public Builder clear() {
       super.clear();
-      countFile_ = 0L;
-
       if (fileContentBuilder_ == null) {
         fileContent_ = java.util.Collections.emptyList();
         bitField0_ = (bitField0_ & ~0x00000001);
@@ -393,7 +363,6 @@ private static final long serialVersionUID = 0L;
     public ru.itmo.java.message.torrent.ListAnswer buildPartial() {
       ru.itmo.java.message.torrent.ListAnswer result = new ru.itmo.java.message.torrent.ListAnswer(this);
       int from_bitField0_ = bitField0_;
-      result.countFile_ = countFile_;
       if (fileContentBuilder_ == null) {
         if (((bitField0_ & 0x00000001) != 0)) {
           fileContent_ = java.util.Collections.unmodifiableList(fileContent_);
@@ -451,9 +420,6 @@ private static final long serialVersionUID = 0L;
 
     public Builder mergeFrom(ru.itmo.java.message.torrent.ListAnswer other) {
       if (other == ru.itmo.java.message.torrent.ListAnswer.getDefaultInstance()) return this;
-      if (other.getCountFile() != 0L) {
-        setCountFile(other.getCountFile());
-      }
       if (fileContentBuilder_ == null) {
         if (!other.fileContent_.isEmpty()) {
           if (fileContent_.isEmpty()) {
@@ -509,37 +475,6 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     private int bitField0_;
-
-    private long countFile_ ;
-    /**
-     * <code>int64 countFile = 1;</code>
-     * @return The countFile.
-     */
-    @java.lang.Override
-    public long getCountFile() {
-      return countFile_;
-    }
-    /**
-     * <code>int64 countFile = 1;</code>
-     * @param value The countFile to set.
-     * @return This builder for chaining.
-     */
-    public Builder setCountFile(long value) {
-      
-      countFile_ = value;
-      onChanged();
-      return this;
-    }
-    /**
-     * <code>int64 countFile = 1;</code>
-     * @return This builder for chaining.
-     */
-    public Builder clearCountFile() {
-      
-      countFile_ = 0L;
-      onChanged();
-      return this;
-    }
 
     private java.util.List<ru.itmo.java.message.torrent.FileContent> fileContent_ =
       java.util.Collections.emptyList();

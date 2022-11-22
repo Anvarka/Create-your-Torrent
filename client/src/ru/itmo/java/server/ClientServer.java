@@ -1,5 +1,6 @@
 package ru.itmo.java.server;
 
+import ru.itmo.java.info.ClientInformer;
 import ru.itmo.java.message.torrent.FileContent;
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -13,21 +14,20 @@ import java.util.logging.Logger;
 public class ClientServer implements Runnable {
     private final ExecutorService readPool = Executors.newCachedThreadPool();
     Logger logger = Logger.getLogger(ClientServer.class.getName());
-    ConcurrentHashMap<FileContent, List<Long>>  distributedFiles;
     ServerSocket serverSocket;
+    private final ClientInformer clientInformer;
 
-    public ClientServer(ConcurrentHashMap<FileContent, List<Long>>  distributedFiles, ServerSocket serverSocket){
-        this.distributedFiles = distributedFiles;
+    public ClientServer(ClientInformer clientInformer, ServerSocket serverSocket){
         this.serverSocket = serverSocket;
+        this.clientInformer = clientInformer;
     };
 
     public void run() {
         try {
             while (!Thread.interrupted()) {
-                System.out.println("I'm here, client server");
                 Socket socket = serverSocket.accept();
                 logger.info("Client to connect client server: " + socket.getInetAddress().getHostAddress());
-                readPool.submit(new ClientServerWorker(socket, distributedFiles));
+                readPool.submit(new ClientServerWorker(socket, clientInformer));
             }
         } catch (IOException e) {
             e.printStackTrace();

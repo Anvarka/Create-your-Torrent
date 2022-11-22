@@ -8,37 +8,31 @@ public interface SourcesAnswerOrBuilder extends
     com.google.protobuf.MessageOrBuilder {
 
   /**
-   * <code>int64 sizeRes = 1;</code>
-   * @return The sizeRes.
-   */
-  long getSizeRes();
-
-  /**
-   * <code>repeated .ru.itmo.java.message.torrent.UserInfo clientWithFile = 2;</code>
+   * <code>repeated .ru.itmo.java.message.torrent.UserInfo clientWithFile = 1;</code>
    */
   java.util.List<ru.itmo.java.message.torrent.UserInfo> 
       getClientWithFileList();
   /**
-   * <code>repeated .ru.itmo.java.message.torrent.UserInfo clientWithFile = 2;</code>
+   * <code>repeated .ru.itmo.java.message.torrent.UserInfo clientWithFile = 1;</code>
    */
   ru.itmo.java.message.torrent.UserInfo getClientWithFile(int index);
   /**
-   * <code>repeated .ru.itmo.java.message.torrent.UserInfo clientWithFile = 2;</code>
+   * <code>repeated .ru.itmo.java.message.torrent.UserInfo clientWithFile = 1;</code>
    */
   int getClientWithFileCount();
   /**
-   * <code>repeated .ru.itmo.java.message.torrent.UserInfo clientWithFile = 2;</code>
+   * <code>repeated .ru.itmo.java.message.torrent.UserInfo clientWithFile = 1;</code>
    */
   java.util.List<? extends ru.itmo.java.message.torrent.UserInfoOrBuilder> 
       getClientWithFileOrBuilderList();
   /**
-   * <code>repeated .ru.itmo.java.message.torrent.UserInfo clientWithFile = 2;</code>
+   * <code>repeated .ru.itmo.java.message.torrent.UserInfo clientWithFile = 1;</code>
    */
   ru.itmo.java.message.torrent.UserInfoOrBuilder getClientWithFileOrBuilder(
       int index);
 
   /**
-   * <code>int64 idFile = 3;</code>
+   * <code>int64 idFile = 2;</code>
    * @return The idFile.
    */
   long getIdFile();

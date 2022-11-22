@@ -61,31 +61,31 @@ public class TrackerInformer {
     }
 
     public FileContent uploadFile(UploadRequest request, UserInfo userInfo) {
-//        lock.lock();
-//        FileContent fileInfo;
-//        try {
-        long idFile = currentId.incrementAndGet();
-        FileContent fileInfo = FileContent.newBuilder()
-                .setIdFile(idFile)
-                .setFilename(request.getFilename())
-                .setSizeFile(request.getSize())
-                .build();
+        lock.lock();
+        FileContent fileInfo;
+        try {
+            long idFile = currentId.incrementAndGet();
+            fileInfo = FileContent.newBuilder()
+                    .setIdFile(idFile)
+                    .setFilename(request.getFilename())
+                    .setSizeFile(request.getSize())
+                    .build();
 
-        idFileAndInfo.putIfAbsent(idFile, fileInfo);
+            idFileAndInfo.putIfAbsent(idFile, fileInfo);
 
-        if (!idFileUsers.containsKey(idFile)) {
-            idFileUsers.computeIfAbsent(idFile, (key) -> new HashSet<>());
+            if (!idFileUsers.containsKey(idFile)) {
+                idFileUsers.computeIfAbsent(idFile, (key) -> new HashSet<>());
+            }
+            idFileUsers.get(idFile).add(userInfo);
+
+            if (!activeUsersIdFiles.containsKey(userInfo)) {
+                activeUsersIdFiles.computeIfAbsent(userInfo, (key) -> new HashSet<>());
+            }
+            activeUsersIdFiles.get(userInfo).add(idFile);
+
+        } finally {
+            lock.unlock();
         }
-        idFileUsers.get(idFile).add(userInfo);
-
-        if (!activeUsersIdFiles.containsKey(userInfo)) {
-            activeUsersIdFiles.computeIfAbsent(userInfo, (key) -> new HashSet<>());
-        }
-        activeUsersIdFiles.get(userInfo).add(idFile);
-
-//        } finally {
-//            lock.unlock();
-//        }
         return fileInfo;
     }
 
@@ -141,27 +141,23 @@ public class TrackerInformer {
         long idFile = request.getIdFile();
 
         List<UserInfo> res = new ArrayList<>();
-
-        for (Map.Entry<UserInfo, Set<Long>> entry : activeUsersIdFiles.entrySet()) {
-            if (entry.getValue().contains(idFile)) {
-                UserInfo clientInfo = entry.getKey();
-                int port = activeUsersServerPorts.get(clientInfo);
-                UserInfo clientIpAndPort = UserInfo.newBuilder().setPort(port).setIp(clientInfo.getIp()).build();
-                res.add(clientIpAndPort);
+        lock.lock();
+        try {
+            for (Map.Entry<UserInfo, Set<Long>> entry : activeUsersIdFiles.entrySet()) {
+                if (entry.getValue().contains(idFile)) {
+                    UserInfo clientInfo = entry.getKey();
+                    int port = activeUsersServerPorts.get(clientInfo);
+                    UserInfo clientIpAndPort = UserInfo.newBuilder().setPort(port).setIp(clientInfo.getIp()).build();
+                    res.add(clientIpAndPort);
+                }
             }
+        } finally {
+            lock.unlock();
         }
-        Set<UserInfo> users;
-//        lock.lock();
-//        try {
-        users = idFileUsers.get(idFile);
-//        } finally {
-//            lock.unlock();
-//        }
 
         return SourcesAnswer.newBuilder()
                 .addAllClientWithFile(res)
                 .setIdFile(idFile)
-                .setSizeRes(users.size())
                 .build();
     }
 
@@ -170,7 +166,6 @@ public class TrackerInformer {
         lock.lock();
         try {
             out.writeInt(idFileAndInfo.size());
-            System.out.println("Close tracker");
             for (var l : idFileAndInfo.entrySet()) {
                 long size = l.getValue().getSizeFile();
                 String name = l.getValue().getFilename();

@@ -52,7 +52,6 @@ message ListRequest {
 }
 
 message ListAnswer {
-  int64 countFile = 1;
   repeated FileContent fileContent = 2;
 }
 
@@ -73,16 +72,14 @@ message SourcesRequest {
 }
 
 message SourcesAnswer {
-  int64 sizeRes = 1;
-  repeated UserInfo clientWithFile = 2;
-  int64 idFile = 3;
+  repeated UserInfo clientWithFile = 1;
+  int64 idFile = 2;
 }
 
 message UpdateRequest {
   UserInfo userInfo = 1;
   int32 portOfClientServer = 2;
-  int64 countSharedFiles = 3;
-  repeated FileContent fileContent = 4;
+  repeated FileContent fileContent = 3;
 }
 
 message UpdateAnswer {
@@ -97,7 +94,6 @@ message StatRequest {
 message StatAnswer {
   UserInfo client = 1;
   int64 idFile = 2;
-  int64 countOfAvailableParts = 3;
   repeated int64 part = 4;
 }
 

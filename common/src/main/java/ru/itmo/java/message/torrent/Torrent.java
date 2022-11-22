@@ -145,35 +145,32 @@ public final class Torrent {
       "H\000B\n\n\010response\"A\n\013FileContent\022\016\n\006idFile\030" +
       "\002 \001(\003\022\020\n\010filename\030\003 \001(\t\022\020\n\010sizeFile\030\004 \001(" +
       "\003\"$\n\010UserInfo\022\n\n\002ip\030\001 \001(\t\022\014\n\004port\030\002 \001(\005\"" +
-      "\r\n\013ListRequest\"_\n\nListAnswer\022\021\n\tcountFil" +
-      "e\030\001 \001(\003\022>\n\013fileContent\030\002 \003(\0132).ru.itmo.j" +
-      "ava.message.torrent.FileContent\"i\n\rUploa" +
-      "dRequest\022\020\n\010filename\030\001 \001(\t\022\014\n\004size\030\002 \001(\003" +
-      "\0228\n\010userInfo\030\003 \001(\0132&.ru.itmo.java.messag" +
-      "e.torrent.UserInfo\"N\n\014UploadAnswer\022>\n\013fi" +
-      "leContent\030\001 \001(\0132).ru.itmo.java.message.t" +
-      "orrent.FileContent\" \n\016SourcesRequest\022\016\n\006" +
-      "idFile\030\001 \001(\003\"p\n\rSourcesAnswer\022\017\n\007sizeRes" +
-      "\030\001 \001(\003\022>\n\016clientWithFile\030\002 \003(\0132&.ru.itmo" +
-      ".java.message.torrent.UserInfo\022\016\n\006idFile" +
-      "\030\003 \001(\003\"\277\001\n\rUpdateRequest\0228\n\010userInfo\030\001 \001" +
-      "(\0132&.ru.itmo.java.message.torrent.UserIn" +
-      "fo\022\032\n\022portOfClientServer\030\002 \001(\005\022\030\n\020countS" +
-      "haredFiles\030\003 \001(\003\022>\n\013fileContent\030\004 \003(\0132)." +
-      "ru.itmo.java.message.torrent.FileContent" +
-      "\"$\n\014UpdateAnswer\022\024\n\014statusUpdate\030\001 \001(\010\"\035" +
-      "\n\013StatRequest\022\016\n\006idFile\030\001 \001(\003\"\201\001\n\nStatAn" +
-      "swer\0226\n\006client\030\001 \001(\0132&.ru.itmo.java.mess" +
-      "age.torrent.UserInfo\022\016\n\006idFile\030\002 \001(\003\022\035\n\025" +
-      "countOfAvailableParts\030\003 \001(\003\022\014\n\004part\030\004 \003(" +
-      "\003\"0\n\nGetRequest\022\016\n\006idFile\030\001 \001(\003\022\022\n\npartO" +
-      "fFile\030\002 \001(\003\"p\n\tGetAnswer\022\017\n\007content\030\001 \001(" +
-      "\014\022>\n\013fileContent\030\002 \001(\0132).ru.itmo.java.me" +
-      "ssage.torrent.FileContent\022\022\n\npartOfFile\030" +
-      "\003 \001(\003\"i\n\tFileParts\0228\n\010userInfo\030\001 \001(\0132&.r" +
-      "u.itmo.java.message.torrent.UserInfo\022\016\n\006" +
-      "idFile\030\002 \001(\003\022\022\n\npartOfFile\030\003 \001(\003B\002P\001b\006pr" +
-      "oto3"
+      "\r\n\013ListRequest\"L\n\nListAnswer\022>\n\013fileCont" +
+      "ent\030\002 \003(\0132).ru.itmo.java.message.torrent" +
+      ".FileContent\"i\n\rUploadRequest\022\020\n\010filenam" +
+      "e\030\001 \001(\t\022\014\n\004size\030\002 \001(\003\0228\n\010userInfo\030\003 \001(\0132" +
+      "&.ru.itmo.java.message.torrent.UserInfo\"" +
+      "N\n\014UploadAnswer\022>\n\013fileContent\030\001 \001(\0132).r" +
+      "u.itmo.java.message.torrent.FileContent\"" +
+      " \n\016SourcesRequest\022\016\n\006idFile\030\001 \001(\003\"_\n\rSou" +
+      "rcesAnswer\022>\n\016clientWithFile\030\001 \003(\0132&.ru." +
+      "itmo.java.message.torrent.UserInfo\022\016\n\006id" +
+      "File\030\002 \001(\003\"\245\001\n\rUpdateRequest\0228\n\010userInfo" +
+      "\030\001 \001(\0132&.ru.itmo.java.message.torrent.Us" +
+      "erInfo\022\032\n\022portOfClientServer\030\002 \001(\005\022>\n\013fi" +
+      "leContent\030\003 \003(\0132).ru.itmo.java.message.t" +
+      "orrent.FileContent\"$\n\014UpdateAnswer\022\024\n\014st" +
+      "atusUpdate\030\001 \001(\010\"\035\n\013StatRequest\022\016\n\006idFil" +
+      "e\030\001 \001(\003\"b\n\nStatAnswer\0226\n\006client\030\001 \001(\0132&." +
+      "ru.itmo.java.message.torrent.UserInfo\022\016\n" +
+      "\006idFile\030\002 \001(\003\022\014\n\004part\030\004 \003(\003\"0\n\nGetReques" +
+      "t\022\016\n\006idFile\030\001 \001(\003\022\022\n\npartOfFile\030\002 \001(\003\"p\n" +
+      "\tGetAnswer\022\017\n\007content\030\001 \001(\014\022>\n\013fileConte" +
+      "nt\030\002 \001(\0132).ru.itmo.java.message.torrent." +
+      "FileContent\022\022\n\npartOfFile\030\003 \001(\003\"i\n\tFileP" +
+      "arts\0228\n\010userInfo\030\001 \001(\0132&.ru.itmo.java.me" +
+      "ssage.torrent.UserInfo\022\016\n\006idFile\030\002 \001(\003\022\022" +
+      "\n\npartOfFile\030\003 \001(\003B\002P\001b\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
@@ -226,7 +223,7 @@ public final class Torrent {
     internal_static_ru_itmo_java_message_torrent_ListAnswer_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_ru_itmo_java_message_torrent_ListAnswer_descriptor,
-        new java.lang.String[] { "CountFile", "FileContent", });
+        new java.lang.String[] { "FileContent", });
     internal_static_ru_itmo_java_message_torrent_UploadRequest_descriptor =
       getDescriptor().getMessageTypes().get(8);
     internal_static_ru_itmo_java_message_torrent_UploadRequest_fieldAccessorTable = new
@@ -250,13 +247,13 @@ public final class Torrent {
     internal_static_ru_itmo_java_message_torrent_SourcesAnswer_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_ru_itmo_java_message_torrent_SourcesAnswer_descriptor,
-        new java.lang.String[] { "SizeRes", "ClientWithFile", "IdFile", });
+        new java.lang.String[] { "ClientWithFile", "IdFile", });
     internal_static_ru_itmo_java_message_torrent_UpdateRequest_descriptor =
       getDescriptor().getMessageTypes().get(12);
     internal_static_ru_itmo_java_message_torrent_UpdateRequest_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_ru_itmo_java_message_torrent_UpdateRequest_descriptor,
-        new java.lang.String[] { "UserInfo", "PortOfClientServer", "CountSharedFiles", "FileContent", });
+        new java.lang.String[] { "UserInfo", "PortOfClientServer", "FileContent", });
     internal_static_ru_itmo_java_message_torrent_UpdateAnswer_descriptor =
       getDescriptor().getMessageTypes().get(13);
     internal_static_ru_itmo_java_message_torrent_UpdateAnswer_fieldAccessorTable = new
@@ -274,7 +271,7 @@ public final class Torrent {
     internal_static_ru_itmo_java_message_torrent_StatAnswer_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_ru_itmo_java_message_torrent_StatAnswer_descriptor,
-        new java.lang.String[] { "Client", "IdFile", "CountOfAvailableParts", "Part", });
+        new java.lang.String[] { "Client", "IdFile", "Part", });
     internal_static_ru_itmo_java_message_torrent_GetRequest_descriptor =
       getDescriptor().getMessageTypes().get(16);
     internal_static_ru_itmo_java_message_torrent_GetRequest_fieldAccessorTable = new

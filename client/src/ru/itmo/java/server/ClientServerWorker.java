@@ -1,26 +1,24 @@
 package ru.itmo.java.server;
 
 import com.google.protobuf.ByteString;
+import ru.itmo.java.info.ClientInformer;
 import ru.itmo.java.message.torrent.*;
 
 import java.io.IOException;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.logging.Logger;
 
 public class ClientServerWorker implements Runnable, AutoCloseable {
-    private Socket clientSocket;
+    private final Socket clientSocket;
     private final Logger logger = Logger.getLogger(ClientServerWorker.class.getName());
     private final ExecutorService writePool = Executors.newSingleThreadExecutor();
-    private final ConcurrentHashMap<FileContent, List<Long>> fileAndParts;
+    private final ClientInformer clientInformer;
 
-    public ClientServerWorker(Socket socket, ConcurrentHashMap<FileContent, List<Long>> distributedFiles) {
+    public ClientServerWorker(Socket socket, ClientInformer clientInformer) {
         clientSocket = socket;
-        this.fileAndParts = distributedFiles;
+        this.clientInformer  = clientInformer;
     }
 
     @Override
@@ -36,32 +34,20 @@ public class ClientServerWorker implements Runnable, AutoCloseable {
                     default -> null;
                 };
                 if (writeTask == null) {
-                    logger.info("Error request to client");
+                    logger.warning("Error request to client");
                     continue;
                 }
                 executeWriteTask(writeTask);
             } catch (Exception e) {
-                System.out.println("error in request to client");
+                logger.warning("Error in getting request to client");
             }
         }
-        try {
-            close();
-        } catch (Exception e) {
-            System.out.println("error in close clientServer");
-//            e.printStackTrace();
-        }
+        close();
     }
 
-    private WriteTask handle(StatRequest statRequest) throws IOException {
+    private WriteTask handle(StatRequest statRequest) {
         logger.info("Get StatRequest");
         var idFile = statRequest.getIdFile();
-        // lock.lock;
-        // try {
-        ConcurrentHashMap<Long, FileContent> idFileAndContent = new ConcurrentHashMap<>();
-        for (var fileContent : fileAndParts.keySet()) {
-            idFileAndContent.put(fileContent.getIdFile(), fileContent);
-        }
-        // finally {lock.unlock();}
 
         UserInfo userInfo = UserInfo.newBuilder()
                 .setIp(clientSocket.getInetAddress().getHostAddress())
@@ -71,8 +57,7 @@ public class ClientServerWorker implements Runnable, AutoCloseable {
         var statAnswer = StatAnswer.newBuilder()
                 .setClient(userInfo)
                 .setIdFile(idFile)
-                .setCountOfAvailableParts(fileAndParts.get(idFileAndContent.get(idFile)).size())
-                .addAllPart(fileAndParts.get(idFileAndContent.get(idFile)))
+                .addAllPart(clientInformer.getPartsOfFile(idFile))
                 .build();
 
         return () -> ResponseFromClientServer.newBuilder()
@@ -84,23 +69,11 @@ public class ClientServerWorker implements Runnable, AutoCloseable {
     private WriteTask handle(GetRequest getRequest) {
         logger.info("Get GetRequest");
         long idFile = getRequest.getIdFile();
-        logger.info("Get id:" + idFile);
         long partNumber = getRequest.getPartOfFile();
-        logger.info("Get part: " + partNumber);
-        ConcurrentHashMap<Long, FileContent> idKeyAndInfo = new ConcurrentHashMap<>();
-        for (var fileContent : fileAndParts.keySet()) {
-            idKeyAndInfo.put(fileContent.getIdFile(), fileContent);
-        }
-        logger.info("Get list");
 
-        FileContent fileInfo = idKeyAndInfo.get(idFile);
+        FileContent fileContent = clientInformer.getContentOfFile(idFile);
         logger.info("Get fileInfo");
-        FileContent fileContent = FileContent.newBuilder()
-                .setSizeFile(fileInfo.getSizeFile())
-                .setIdFile(fileInfo.getIdFile())
-                .setFilename(fileInfo.getFilename())
-                .build();
-        byte[] contentOfPart = FileSplitter.getContentFromPart(fileInfo, partNumber);
+        byte[] contentOfPart = FileSplitter.getContentFromPart(fileContent, partNumber);
 
         var getAnswer = GetAnswer.newBuilder()
                 .setContent(ByteString.copyFrom(contentOfPart))
@@ -125,7 +98,7 @@ public class ClientServerWorker implements Runnable, AutoCloseable {
     }
 
     @Override
-    public void close() throws Exception {
+    public void close() {
         writePool.shutdown();
     }
 }

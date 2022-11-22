@@ -50,12 +50,7 @@ private static final long serialVersionUID = 0L;
           case 0:
             done = true;
             break;
-          case 8: {
-
-            sizeRes_ = input.readInt64();
-            break;
-          }
-          case 18: {
+          case 10: {
             if (!((mutable_bitField0_ & 0x00000001) != 0)) {
               clientWithFile_ = new java.util.ArrayList<ru.itmo.java.message.torrent.UserInfo>();
               mutable_bitField0_ |= 0x00000001;
@@ -64,7 +59,7 @@ private static final long serialVersionUID = 0L;
                 input.readMessage(ru.itmo.java.message.torrent.UserInfo.parser(), extensionRegistry));
             break;
           }
-          case 24: {
+          case 16: {
 
             idFile_ = input.readInt64();
             break;
@@ -104,28 +99,17 @@ private static final long serialVersionUID = 0L;
             ru.itmo.java.message.torrent.SourcesAnswer.class, ru.itmo.java.message.torrent.SourcesAnswer.Builder.class);
   }
 
-  public static final int SIZERES_FIELD_NUMBER = 1;
-  private long sizeRes_;
-  /**
-   * <code>int64 sizeRes = 1;</code>
-   * @return The sizeRes.
-   */
-  @java.lang.Override
-  public long getSizeRes() {
-    return sizeRes_;
-  }
-
-  public static final int CLIENTWITHFILE_FIELD_NUMBER = 2;
+  public static final int CLIENTWITHFILE_FIELD_NUMBER = 1;
   private java.util.List<ru.itmo.java.message.torrent.UserInfo> clientWithFile_;
   /**
-   * <code>repeated .ru.itmo.java.message.torrent.UserInfo clientWithFile = 2;</code>
+   * <code>repeated .ru.itmo.java.message.torrent.UserInfo clientWithFile = 1;</code>
    */
   @java.lang.Override
   public java.util.List<ru.itmo.java.message.torrent.UserInfo> getClientWithFileList() {
     return clientWithFile_;
   }
   /**
-   * <code>repeated .ru.itmo.java.message.torrent.UserInfo clientWithFile = 2;</code>
+   * <code>repeated .ru.itmo.java.message.torrent.UserInfo clientWithFile = 1;</code>
    */
   @java.lang.Override
   public java.util.List<? extends ru.itmo.java.message.torrent.UserInfoOrBuilder> 
@@ -133,21 +117,21 @@ private static final long serialVersionUID = 0L;
     return clientWithFile_;
   }
   /**
-   * <code>repeated .ru.itmo.java.message.torrent.UserInfo clientWithFile = 2;</code>
+   * <code>repeated .ru.itmo.java.message.torrent.UserInfo clientWithFile = 1;</code>
    */
   @java.lang.Override
   public int getClientWithFileCount() {
     return clientWithFile_.size();
   }
   /**
-   * <code>repeated .ru.itmo.java.message.torrent.UserInfo clientWithFile = 2;</code>
+   * <code>repeated .ru.itmo.java.message.torrent.UserInfo clientWithFile = 1;</code>
    */
   @java.lang.Override
   public ru.itmo.java.message.torrent.UserInfo getClientWithFile(int index) {
     return clientWithFile_.get(index);
   }
   /**
-   * <code>repeated .ru.itmo.java.message.torrent.UserInfo clientWithFile = 2;</code>
+   * <code>repeated .ru.itmo.java.message.torrent.UserInfo clientWithFile = 1;</code>
    */
   @java.lang.Override
   public ru.itmo.java.message.torrent.UserInfoOrBuilder getClientWithFileOrBuilder(
@@ -155,10 +139,10 @@ private static final long serialVersionUID = 0L;
     return clientWithFile_.get(index);
   }
 
-  public static final int IDFILE_FIELD_NUMBER = 3;
+  public static final int IDFILE_FIELD_NUMBER = 2;
   private long idFile_;
   /**
-   * <code>int64 idFile = 3;</code>
+   * <code>int64 idFile = 2;</code>
    * @return The idFile.
    */
   @java.lang.Override
@@ -180,14 +164,11 @@ private static final long serialVersionUID = 0L;
   @java.lang.Override
   public void writeTo(com.google.protobuf.CodedOutputStream output)
                       throws java.io.IOException {
-    if (sizeRes_ != 0L) {
-      output.writeInt64(1, sizeRes_);
-    }
     for (int i = 0; i < clientWithFile_.size(); i++) {
-      output.writeMessage(2, clientWithFile_.get(i));
+      output.writeMessage(1, clientWithFile_.get(i));
     }
     if (idFile_ != 0L) {
-      output.writeInt64(3, idFile_);
+      output.writeInt64(2, idFile_);
     }
     unknownFields.writeTo(output);
   }
@@ -198,17 +179,13 @@ private static final long serialVersionUID = 0L;
     if (size != -1) return size;
 
     size = 0;
-    if (sizeRes_ != 0L) {
-      size += com.google.protobuf.CodedOutputStream
-        .computeInt64Size(1, sizeRes_);
-    }
     for (int i = 0; i < clientWithFile_.size(); i++) {
       size += com.google.protobuf.CodedOutputStream
-        .computeMessageSize(2, clientWithFile_.get(i));
+        .computeMessageSize(1, clientWithFile_.get(i));
     }
     if (idFile_ != 0L) {
       size += com.google.protobuf.CodedOutputStream
-        .computeInt64Size(3, idFile_);
+        .computeInt64Size(2, idFile_);
     }
     size += unknownFields.getSerializedSize();
     memoizedSize = size;
@@ -225,8 +202,6 @@ private static final long serialVersionUID = 0L;
     }
     ru.itmo.java.message.torrent.SourcesAnswer other = (ru.itmo.java.message.torrent.SourcesAnswer) obj;
 
-    if (getSizeRes()
-        != other.getSizeRes()) return false;
     if (!getClientWithFileList()
         .equals(other.getClientWithFileList())) return false;
     if (getIdFile()
@@ -242,9 +217,6 @@ private static final long serialVersionUID = 0L;
     }
     int hash = 41;
     hash = (19 * hash) + getDescriptor().hashCode();
-    hash = (37 * hash) + SIZERES_FIELD_NUMBER;
-    hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
-        getSizeRes());
     if (getClientWithFileCount() > 0) {
       hash = (37 * hash) + CLIENTWITHFILE_FIELD_NUMBER;
       hash = (53 * hash) + getClientWithFileList().hashCode();
@@ -386,8 +358,6 @@ private static final long serialVersionUID = 0L;
     @java.lang.Override
     public Builder clear() {
       super.clear();
-      sizeRes_ = 0L;
-
       if (clientWithFileBuilder_ == null) {
         clientWithFile_ = java.util.Collections.emptyList();
         bitField0_ = (bitField0_ & ~0x00000001);
@@ -423,7 +393,6 @@ private static final long serialVersionUID = 0L;
     public ru.itmo.java.message.torrent.SourcesAnswer buildPartial() {
       ru.itmo.java.message.torrent.SourcesAnswer result = new ru.itmo.java.message.torrent.SourcesAnswer(this);
       int from_bitField0_ = bitField0_;
-      result.sizeRes_ = sizeRes_;
       if (clientWithFileBuilder_ == null) {
         if (((bitField0_ & 0x00000001) != 0)) {
           clientWithFile_ = java.util.Collections.unmodifiableList(clientWithFile_);
@@ -482,9 +451,6 @@ private static final long serialVersionUID = 0L;
 
     public Builder mergeFrom(ru.itmo.java.message.torrent.SourcesAnswer other) {
       if (other == ru.itmo.java.message.torrent.SourcesAnswer.getDefaultInstance()) return this;
-      if (other.getSizeRes() != 0L) {
-        setSizeRes(other.getSizeRes());
-      }
       if (clientWithFileBuilder_ == null) {
         if (!other.clientWithFile_.isEmpty()) {
           if (clientWithFile_.isEmpty()) {
@@ -544,37 +510,6 @@ private static final long serialVersionUID = 0L;
     }
     private int bitField0_;
 
-    private long sizeRes_ ;
-    /**
-     * <code>int64 sizeRes = 1;</code>
-     * @return The sizeRes.
-     */
-    @java.lang.Override
-    public long getSizeRes() {
-      return sizeRes_;
-    }
-    /**
-     * <code>int64 sizeRes = 1;</code>
-     * @param value The sizeRes to set.
-     * @return This builder for chaining.
-     */
-    public Builder setSizeRes(long value) {
-      
-      sizeRes_ = value;
-      onChanged();
-      return this;
-    }
-    /**
-     * <code>int64 sizeRes = 1;</code>
-     * @return This builder for chaining.
-     */
-    public Builder clearSizeRes() {
-      
-      sizeRes_ = 0L;
-      onChanged();
-      return this;
-    }
-
     private java.util.List<ru.itmo.java.message.torrent.UserInfo> clientWithFile_ =
       java.util.Collections.emptyList();
     private void ensureClientWithFileIsMutable() {
@@ -588,7 +523,7 @@ private static final long serialVersionUID = 0L;
         ru.itmo.java.message.torrent.UserInfo, ru.itmo.java.message.torrent.UserInfo.Builder, ru.itmo.java.message.torrent.UserInfoOrBuilder> clientWithFileBuilder_;
 
     /**
-     * <code>repeated .ru.itmo.java.message.torrent.UserInfo clientWithFile = 2;</code>
+     * <code>repeated .ru.itmo.java.message.torrent.UserInfo clientWithFile = 1;</code>
      */
     public java.util.List<ru.itmo.java.message.torrent.UserInfo> getClientWithFileList() {
       if (clientWithFileBuilder_ == null) {
@@ -598,7 +533,7 @@ private static final long serialVersionUID = 0L;
       }
     }
     /**
-     * <code>repeated .ru.itmo.java.message.torrent.UserInfo clientWithFile = 2;</code>
+     * <code>repeated .ru.itmo.java.message.torrent.UserInfo clientWithFile = 1;</code>
      */
     public int getClientWithFileCount() {
       if (clientWithFileBuilder_ == null) {
@@ -608,7 +543,7 @@ private static final long serialVersionUID = 0L;
       }
     }
     /**
-     * <code>repeated .ru.itmo.java.message.torrent.UserInfo clientWithFile = 2;</code>
+     * <code>repeated .ru.itmo.java.message.torrent.UserInfo clientWithFile = 1;</code>
      */
     public ru.itmo.java.message.torrent.UserInfo getClientWithFile(int index) {
       if (clientWithFileBuilder_ == null) {
@@ -618,7 +553,7 @@ private static final long serialVersionUID = 0L;
       }
     }
     /**
-     * <code>repeated .ru.itmo.java.message.torrent.UserInfo clientWithFile = 2;</code>
+     * <code>repeated .ru.itmo.java.message.torrent.UserInfo clientWithFile = 1;</code>
      */
     public Builder setClientWithFile(
         int index, ru.itmo.java.message.torrent.UserInfo value) {
@@ -635,7 +570,7 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <code>repeated .ru.itmo.java.message.torrent.UserInfo clientWithFile = 2;</code>
+     * <code>repeated .ru.itmo.java.message.torrent.UserInfo clientWithFile = 1;</code>
      */
     public Builder setClientWithFile(
         int index, ru.itmo.java.message.torrent.UserInfo.Builder builderForValue) {
@@ -649,7 +584,7 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <code>repeated .ru.itmo.java.message.torrent.UserInfo clientWithFile = 2;</code>
+     * <code>repeated .ru.itmo.java.message.torrent.UserInfo clientWithFile = 1;</code>
      */
     public Builder addClientWithFile(ru.itmo.java.message.torrent.UserInfo value) {
       if (clientWithFileBuilder_ == null) {
@@ -665,7 +600,7 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <code>repeated .ru.itmo.java.message.torrent.UserInfo clientWithFile = 2;</code>
+     * <code>repeated .ru.itmo.java.message.torrent.UserInfo clientWithFile = 1;</code>
      */
     public Builder addClientWithFile(
         int index, ru.itmo.java.message.torrent.UserInfo value) {
@@ -682,7 +617,7 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <code>repeated .ru.itmo.java.message.torrent.UserInfo clientWithFile = 2;</code>
+     * <code>repeated .ru.itmo.java.message.torrent.UserInfo clientWithFile = 1;</code>
      */
     public Builder addClientWithFile(
         ru.itmo.java.message.torrent.UserInfo.Builder builderForValue) {
@@ -696,7 +631,7 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <code>repeated .ru.itmo.java.message.torrent.UserInfo clientWithFile = 2;</code>
+     * <code>repeated .ru.itmo.java.message.torrent.UserInfo clientWithFile = 1;</code>
      */
     public Builder addClientWithFile(
         int index, ru.itmo.java.message.torrent.UserInfo.Builder builderForValue) {
@@ -710,7 +645,7 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <code>repeated .ru.itmo.java.message.torrent.UserInfo clientWithFile = 2;</code>
+     * <code>repeated .ru.itmo.java.message.torrent.UserInfo clientWithFile = 1;</code>
      */
     public Builder addAllClientWithFile(
         java.lang.Iterable<? extends ru.itmo.java.message.torrent.UserInfo> values) {
@@ -725,7 +660,7 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <code>repeated .ru.itmo.java.message.torrent.UserInfo clientWithFile = 2;</code>
+     * <code>repeated .ru.itmo.java.message.torrent.UserInfo clientWithFile = 1;</code>
      */
     public Builder clearClientWithFile() {
       if (clientWithFileBuilder_ == null) {
@@ -738,7 +673,7 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <code>repeated .ru.itmo.java.message.torrent.UserInfo clientWithFile = 2;</code>
+     * <code>repeated .ru.itmo.java.message.torrent.UserInfo clientWithFile = 1;</code>
      */
     public Builder removeClientWithFile(int index) {
       if (clientWithFileBuilder_ == null) {
@@ -751,14 +686,14 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <code>repeated .ru.itmo.java.message.torrent.UserInfo clientWithFile = 2;</code>
+     * <code>repeated .ru.itmo.java.message.torrent.UserInfo clientWithFile = 1;</code>
      */
     public ru.itmo.java.message.torrent.UserInfo.Builder getClientWithFileBuilder(
         int index) {
       return getClientWithFileFieldBuilder().getBuilder(index);
     }
     /**
-     * <code>repeated .ru.itmo.java.message.torrent.UserInfo clientWithFile = 2;</code>
+     * <code>repeated .ru.itmo.java.message.torrent.UserInfo clientWithFile = 1;</code>
      */
     public ru.itmo.java.message.torrent.UserInfoOrBuilder getClientWithFileOrBuilder(
         int index) {
@@ -768,7 +703,7 @@ private static final long serialVersionUID = 0L;
       }
     }
     /**
-     * <code>repeated .ru.itmo.java.message.torrent.UserInfo clientWithFile = 2;</code>
+     * <code>repeated .ru.itmo.java.message.torrent.UserInfo clientWithFile = 1;</code>
      */
     public java.util.List<? extends ru.itmo.java.message.torrent.UserInfoOrBuilder> 
          getClientWithFileOrBuilderList() {
@@ -779,14 +714,14 @@ private static final long serialVersionUID = 0L;
       }
     }
     /**
-     * <code>repeated .ru.itmo.java.message.torrent.UserInfo clientWithFile = 2;</code>
+     * <code>repeated .ru.itmo.java.message.torrent.UserInfo clientWithFile = 1;</code>
      */
     public ru.itmo.java.message.torrent.UserInfo.Builder addClientWithFileBuilder() {
       return getClientWithFileFieldBuilder().addBuilder(
           ru.itmo.java.message.torrent.UserInfo.getDefaultInstance());
     }
     /**
-     * <code>repeated .ru.itmo.java.message.torrent.UserInfo clientWithFile = 2;</code>
+     * <code>repeated .ru.itmo.java.message.torrent.UserInfo clientWithFile = 1;</code>
      */
     public ru.itmo.java.message.torrent.UserInfo.Builder addClientWithFileBuilder(
         int index) {
@@ -794,7 +729,7 @@ private static final long serialVersionUID = 0L;
           index, ru.itmo.java.message.torrent.UserInfo.getDefaultInstance());
     }
     /**
-     * <code>repeated .ru.itmo.java.message.torrent.UserInfo clientWithFile = 2;</code>
+     * <code>repeated .ru.itmo.java.message.torrent.UserInfo clientWithFile = 1;</code>
      */
     public java.util.List<ru.itmo.java.message.torrent.UserInfo.Builder> 
          getClientWithFileBuilderList() {
@@ -817,7 +752,7 @@ private static final long serialVersionUID = 0L;
 
     private long idFile_ ;
     /**
-     * <code>int64 idFile = 3;</code>
+     * <code>int64 idFile = 2;</code>
      * @return The idFile.
      */
     @java.lang.Override
@@ -825,7 +760,7 @@ private static final long serialVersionUID = 0L;
       return idFile_;
     }
     /**
-     * <code>int64 idFile = 3;</code>
+     * <code>int64 idFile = 2;</code>
      * @param value The idFile to set.
      * @return This builder for chaining.
      */
@@ -836,7 +771,7 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <code>int64 idFile = 3;</code>
+     * <code>int64 idFile = 2;</code>
      * @return This builder for chaining.
      */
     public Builder clearIdFile() {

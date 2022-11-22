@@ -68,11 +68,6 @@ private static final long serialVersionUID = 0L;
             idFile_ = input.readInt64();
             break;
           }
-          case 24: {
-
-            countOfAvailableParts_ = input.readInt64();
-            break;
-          }
           case 32: {
             if (!((mutable_bitField0_ & 0x00000001) != 0)) {
               part_ = newLongList();
@@ -166,17 +161,6 @@ private static final long serialVersionUID = 0L;
     return idFile_;
   }
 
-  public static final int COUNTOFAVAILABLEPARTS_FIELD_NUMBER = 3;
-  private long countOfAvailableParts_;
-  /**
-   * <code>int64 countOfAvailableParts = 3;</code>
-   * @return The countOfAvailableParts.
-   */
-  @java.lang.Override
-  public long getCountOfAvailableParts() {
-    return countOfAvailableParts_;
-  }
-
   public static final int PART_FIELD_NUMBER = 4;
   private com.google.protobuf.Internal.LongList part_;
   /**
@@ -226,9 +210,6 @@ private static final long serialVersionUID = 0L;
     if (idFile_ != 0L) {
       output.writeInt64(2, idFile_);
     }
-    if (countOfAvailableParts_ != 0L) {
-      output.writeInt64(3, countOfAvailableParts_);
-    }
     if (getPartList().size() > 0) {
       output.writeUInt32NoTag(34);
       output.writeUInt32NoTag(partMemoizedSerializedSize);
@@ -252,10 +233,6 @@ private static final long serialVersionUID = 0L;
     if (idFile_ != 0L) {
       size += com.google.protobuf.CodedOutputStream
         .computeInt64Size(2, idFile_);
-    }
-    if (countOfAvailableParts_ != 0L) {
-      size += com.google.protobuf.CodedOutputStream
-        .computeInt64Size(3, countOfAvailableParts_);
     }
     {
       int dataSize = 0;
@@ -293,8 +270,6 @@ private static final long serialVersionUID = 0L;
     }
     if (getIdFile()
         != other.getIdFile()) return false;
-    if (getCountOfAvailableParts()
-        != other.getCountOfAvailableParts()) return false;
     if (!getPartList()
         .equals(other.getPartList())) return false;
     if (!unknownFields.equals(other.unknownFields)) return false;
@@ -315,9 +290,6 @@ private static final long serialVersionUID = 0L;
     hash = (37 * hash) + IDFILE_FIELD_NUMBER;
     hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
         getIdFile());
-    hash = (37 * hash) + COUNTOFAVAILABLEPARTS_FIELD_NUMBER;
-    hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
-        getCountOfAvailableParts());
     if (getPartCount() > 0) {
       hash = (37 * hash) + PART_FIELD_NUMBER;
       hash = (53 * hash) + getPartList().hashCode();
@@ -463,8 +435,6 @@ private static final long serialVersionUID = 0L;
       }
       idFile_ = 0L;
 
-      countOfAvailableParts_ = 0L;
-
       part_ = emptyLongList();
       bitField0_ = (bitField0_ & ~0x00000001);
       return this;
@@ -500,7 +470,6 @@ private static final long serialVersionUID = 0L;
         result.client_ = clientBuilder_.build();
       }
       result.idFile_ = idFile_;
-      result.countOfAvailableParts_ = countOfAvailableParts_;
       if (((bitField0_ & 0x00000001) != 0)) {
         part_.makeImmutable();
         bitField0_ = (bitField0_ & ~0x00000001);
@@ -559,9 +528,6 @@ private static final long serialVersionUID = 0L;
       }
       if (other.getIdFile() != 0L) {
         setIdFile(other.getIdFile());
-      }
-      if (other.getCountOfAvailableParts() != 0L) {
-        setCountOfAvailableParts(other.getCountOfAvailableParts());
       }
       if (!other.part_.isEmpty()) {
         if (part_.isEmpty()) {
@@ -749,37 +715,6 @@ private static final long serialVersionUID = 0L;
     public Builder clearIdFile() {
       
       idFile_ = 0L;
-      onChanged();
-      return this;
-    }
-
-    private long countOfAvailableParts_ ;
-    /**
-     * <code>int64 countOfAvailableParts = 3;</code>
-     * @return The countOfAvailableParts.
-     */
-    @java.lang.Override
-    public long getCountOfAvailableParts() {
-      return countOfAvailableParts_;
-    }
-    /**
-     * <code>int64 countOfAvailableParts = 3;</code>
-     * @param value The countOfAvailableParts to set.
-     * @return This builder for chaining.
-     */
-    public Builder setCountOfAvailableParts(long value) {
-      
-      countOfAvailableParts_ = value;
-      onChanged();
-      return this;
-    }
-    /**
-     * <code>int64 countOfAvailableParts = 3;</code>
-     * @return This builder for chaining.
-     */
-    public Builder clearCountOfAvailableParts() {
-      
-      countOfAvailableParts_ = 0L;
       onChanged();
       return this;
     }

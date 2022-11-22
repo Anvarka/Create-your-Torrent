@@ -29,12 +29,6 @@ public interface StatAnswerOrBuilder extends
   long getIdFile();
 
   /**
-   * <code>int64 countOfAvailableParts = 3;</code>
-   * @return The countOfAvailableParts.
-   */
-  long getCountOfAvailableParts();
-
-  /**
    * <code>repeated int64 part = 4;</code>
    * @return A list containing the part.
    */

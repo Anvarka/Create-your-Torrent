@@ -8,12 +8,6 @@ public interface ListAnswerOrBuilder extends
     com.google.protobuf.MessageOrBuilder {
 
   /**
-   * <code>int64 countFile = 1;</code>
-   * @return The countFile.
-   */
-  long getCountFile();
-
-  /**
    * <code>repeated .ru.itmo.java.message.torrent.FileContent fileContent = 2;</code>
    */
   java.util.List<ru.itmo.java.message.torrent.FileContent> 

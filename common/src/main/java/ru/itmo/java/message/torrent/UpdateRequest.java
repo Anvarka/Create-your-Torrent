@@ -68,12 +68,7 @@ private static final long serialVersionUID = 0L;
             portOfClientServer_ = input.readInt32();
             break;
           }
-          case 24: {
-
-            countSharedFiles_ = input.readInt64();
-            break;
-          }
-          case 34: {
+          case 26: {
             if (!((mutable_bitField0_ & 0x00000001) != 0)) {
               fileContent_ = new java.util.ArrayList<ru.itmo.java.message.torrent.FileContent>();
               mutable_bitField0_ |= 0x00000001;
@@ -154,28 +149,17 @@ private static final long serialVersionUID = 0L;
     return portOfClientServer_;
   }
 
-  public static final int COUNTSHAREDFILES_FIELD_NUMBER = 3;
-  private long countSharedFiles_;
-  /**
-   * <code>int64 countSharedFiles = 3;</code>
-   * @return The countSharedFiles.
-   */
-  @java.lang.Override
-  public long getCountSharedFiles() {
-    return countSharedFiles_;
-  }
-
-  public static final int FILECONTENT_FIELD_NUMBER = 4;
+  public static final int FILECONTENT_FIELD_NUMBER = 3;
   private java.util.List<ru.itmo.java.message.torrent.FileContent> fileContent_;
   /**
-   * <code>repeated .ru.itmo.java.message.torrent.FileContent fileContent = 4;</code>
+   * <code>repeated .ru.itmo.java.message.torrent.FileContent fileContent = 3;</code>
    */
   @java.lang.Override
   public java.util.List<ru.itmo.java.message.torrent.FileContent> getFileContentList() {
     return fileContent_;
   }
   /**
-   * <code>repeated .ru.itmo.java.message.torrent.FileContent fileContent = 4;</code>
+   * <code>repeated .ru.itmo.java.message.torrent.FileContent fileContent = 3;</code>
    */
   @java.lang.Override
   public java.util.List<? extends ru.itmo.java.message.torrent.FileContentOrBuilder> 
@@ -183,21 +167,21 @@ private static final long serialVersionUID = 0L;
     return fileContent_;
   }
   /**
-   * <code>repeated .ru.itmo.java.message.torrent.FileContent fileContent = 4;</code>
+   * <code>repeated .ru.itmo.java.message.torrent.FileContent fileContent = 3;</code>
    */
   @java.lang.Override
   public int getFileContentCount() {
     return fileContent_.size();
   }
   /**
-   * <code>repeated .ru.itmo.java.message.torrent.FileContent fileContent = 4;</code>
+   * <code>repeated .ru.itmo.java.message.torrent.FileContent fileContent = 3;</code>
    */
   @java.lang.Override
   public ru.itmo.java.message.torrent.FileContent getFileContent(int index) {
     return fileContent_.get(index);
   }
   /**
-   * <code>repeated .ru.itmo.java.message.torrent.FileContent fileContent = 4;</code>
+   * <code>repeated .ru.itmo.java.message.torrent.FileContent fileContent = 3;</code>
    */
   @java.lang.Override
   public ru.itmo.java.message.torrent.FileContentOrBuilder getFileContentOrBuilder(
@@ -225,11 +209,8 @@ private static final long serialVersionUID = 0L;
     if (portOfClientServer_ != 0) {
       output.writeInt32(2, portOfClientServer_);
     }
-    if (countSharedFiles_ != 0L) {
-      output.writeInt64(3, countSharedFiles_);
-    }
     for (int i = 0; i < fileContent_.size(); i++) {
-      output.writeMessage(4, fileContent_.get(i));
+      output.writeMessage(3, fileContent_.get(i));
     }
     unknownFields.writeTo(output);
   }
@@ -248,13 +229,9 @@ private static final long serialVersionUID = 0L;
       size += com.google.protobuf.CodedOutputStream
         .computeInt32Size(2, portOfClientServer_);
     }
-    if (countSharedFiles_ != 0L) {
-      size += com.google.protobuf.CodedOutputStream
-        .computeInt64Size(3, countSharedFiles_);
-    }
     for (int i = 0; i < fileContent_.size(); i++) {
       size += com.google.protobuf.CodedOutputStream
-        .computeMessageSize(4, fileContent_.get(i));
+        .computeMessageSize(3, fileContent_.get(i));
     }
     size += unknownFields.getSerializedSize();
     memoizedSize = size;
@@ -278,8 +255,6 @@ private static final long serialVersionUID = 0L;
     }
     if (getPortOfClientServer()
         != other.getPortOfClientServer()) return false;
-    if (getCountSharedFiles()
-        != other.getCountSharedFiles()) return false;
     if (!getFileContentList()
         .equals(other.getFileContentList())) return false;
     if (!unknownFields.equals(other.unknownFields)) return false;
@@ -299,9 +274,6 @@ private static final long serialVersionUID = 0L;
     }
     hash = (37 * hash) + PORTOFCLIENTSERVER_FIELD_NUMBER;
     hash = (53 * hash) + getPortOfClientServer();
-    hash = (37 * hash) + COUNTSHAREDFILES_FIELD_NUMBER;
-    hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
-        getCountSharedFiles());
     if (getFileContentCount() > 0) {
       hash = (37 * hash) + FILECONTENT_FIELD_NUMBER;
       hash = (53 * hash) + getFileContentList().hashCode();
@@ -448,8 +420,6 @@ private static final long serialVersionUID = 0L;
       }
       portOfClientServer_ = 0;
 
-      countSharedFiles_ = 0L;
-
       if (fileContentBuilder_ == null) {
         fileContent_ = java.util.Collections.emptyList();
         bitField0_ = (bitField0_ & ~0x00000001);
@@ -489,7 +459,6 @@ private static final long serialVersionUID = 0L;
         result.userInfo_ = userInfoBuilder_.build();
       }
       result.portOfClientServer_ = portOfClientServer_;
-      result.countSharedFiles_ = countSharedFiles_;
       if (fileContentBuilder_ == null) {
         if (((bitField0_ & 0x00000001) != 0)) {
           fileContent_ = java.util.Collections.unmodifiableList(fileContent_);
@@ -552,9 +521,6 @@ private static final long serialVersionUID = 0L;
       }
       if (other.getPortOfClientServer() != 0) {
         setPortOfClientServer(other.getPortOfClientServer());
-      }
-      if (other.getCountSharedFiles() != 0L) {
-        setCountSharedFiles(other.getCountSharedFiles());
       }
       if (fileContentBuilder_ == null) {
         if (!other.fileContent_.isEmpty()) {
@@ -762,37 +728,6 @@ private static final long serialVersionUID = 0L;
       return this;
     }
 
-    private long countSharedFiles_ ;
-    /**
-     * <code>int64 countSharedFiles = 3;</code>
-     * @return The countSharedFiles.
-     */
-    @java.lang.Override
-    public long getCountSharedFiles() {
-      return countSharedFiles_;
-    }
-    /**
-     * <code>int64 countSharedFiles = 3;</code>
-     * @param value The countSharedFiles to set.
-     * @return This builder for chaining.
-     */
-    public Builder setCountSharedFiles(long value) {
-      
-      countSharedFiles_ = value;
-      onChanged();
-      return this;
-    }
-    /**
-     * <code>int64 countSharedFiles = 3;</code>
-     * @return This builder for chaining.
-     */
-    public Builder clearCountSharedFiles() {
-      
-      countSharedFiles_ = 0L;
-      onChanged();
-      return this;
-    }
-
     private java.util.List<ru.itmo.java.message.torrent.FileContent> fileContent_ =
       java.util.Collections.emptyList();
     private void ensureFileContentIsMutable() {
@@ -806,7 +741,7 @@ private static final long serialVersionUID = 0L;
         ru.itmo.java.message.torrent.FileContent, ru.itmo.java.message.torrent.FileContent.Builder, ru.itmo.java.message.torrent.FileContentOrBuilder> fileContentBuilder_;
 
     /**
-     * <code>repeated .ru.itmo.java.message.torrent.FileContent fileContent = 4;</code>
+     * <code>repeated .ru.itmo.java.message.torrent.FileContent fileContent = 3;</code>
      */
     public java.util.List<ru.itmo.java.message.torrent.FileContent> getFileContentList() {
       if (fileContentBuilder_ == null) {
@@ -816,7 +751,7 @@ private static final long serialVersionUID = 0L;
       }
     }
     /**
-     * <code>repeated .ru.itmo.java.message.torrent.FileContent fileContent = 4;</code>
+     * <code>repeated .ru.itmo.java.message.torrent.FileContent fileContent = 3;</code>
      */
     public int getFileContentCount() {
       if (fileContentBuilder_ == null) {
@@ -826,7 +761,7 @@ private static final long serialVersionUID = 0L;
       }
     }
     /**
-     * <code>repeated .ru.itmo.java.message.torrent.FileContent fileContent = 4;</code>
+     * <code>repeated .ru.itmo.java.message.torrent.FileContent fileContent = 3;</code>
      */
     public ru.itmo.java.message.torrent.FileContent getFileContent(int index) {
       if (fileContentBuilder_ == null) {
@@ -836,7 +771,7 @@ private static final long serialVersionUID = 0L;
       }
     }
     /**
-     * <code>repeated .ru.itmo.java.message.torrent.FileContent fileContent = 4;</code>
+     * <code>repeated .ru.itmo.java.message.torrent.FileContent fileContent = 3;</code>
      */
     public Builder setFileContent(
         int index, ru.itmo.java.message.torrent.FileContent value) {
@@ -853,7 +788,7 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <code>repeated .ru.itmo.java.message.torrent.FileContent fileContent = 4;</code>
+     * <code>repeated .ru.itmo.java.message.torrent.FileContent fileContent = 3;</code>
      */
     public Builder setFileContent(
         int index, ru.itmo.java.message.torrent.FileContent.Builder builderForValue) {
@@ -867,7 +802,7 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <code>repeated .ru.itmo.java.message.torrent.FileContent fileContent = 4;</code>
+     * <code>repeated .ru.itmo.java.message.torrent.FileContent fileContent = 3;</code>
      */
     public Builder addFileContent(ru.itmo.java.message.torrent.FileContent value) {
       if (fileContentBuilder_ == null) {
@@ -883,7 +818,7 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <code>repeated .ru.itmo.java.message.torrent.FileContent fileContent = 4;</code>
+     * <code>repeated .ru.itmo.java.message.torrent.FileContent fileContent = 3;</code>
      */
     public Builder addFileContent(
         int index, ru.itmo.java.message.torrent.FileContent value) {
@@ -900,7 +835,7 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <code>repeated .ru.itmo.java.message.torrent.FileContent fileContent = 4;</code>
+     * <code>repeated .ru.itmo.java.message.torrent.FileContent fileContent = 3;</code>
      */
     public Builder addFileContent(
         ru.itmo.java.message.torrent.FileContent.Builder builderForValue) {
@@ -914,7 +849,7 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <code>repeated .ru.itmo.java.message.torrent.FileContent fileContent = 4;</code>
+     * <code>repeated .ru.itmo.java.message.torrent.FileContent fileContent = 3;</code>
      */
     public Builder addFileContent(
         int index, ru.itmo.java.message.torrent.FileContent.Builder builderForValue) {
@@ -928,7 +863,7 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <code>repeated .ru.itmo.java.message.torrent.FileContent fileContent = 4;</code>
+     * <code>repeated .ru.itmo.java.message.torrent.FileContent fileContent = 3;</code>
      */
     public Builder addAllFileContent(
         java.lang.Iterable<? extends ru.itmo.java.message.torrent.FileContent> values) {
@@ -943,7 +878,7 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <code>repeated .ru.itmo.java.message.torrent.FileContent fileContent = 4;</code>
+     * <code>repeated .ru.itmo.java.message.torrent.FileContent fileContent = 3;</code>
      */
     public Builder clearFileContent() {
       if (fileContentBuilder_ == null) {
@@ -956,7 +891,7 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <code>repeated .ru.itmo.java.message.torrent.FileContent fileContent = 4;</code>
+     * <code>repeated .ru.itmo.java.message.torrent.FileContent fileContent = 3;</code>
      */
     public Builder removeFileContent(int index) {
       if (fileContentBuilder_ == null) {
@@ -969,14 +904,14 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <code>repeated .ru.itmo.java.message.torrent.FileContent fileContent = 4;</code>
+     * <code>repeated .ru.itmo.java.message.torrent.FileContent fileContent = 3;</code>
      */
     public ru.itmo.java.message.torrent.FileContent.Builder getFileContentBuilder(
         int index) {
       return getFileContentFieldBuilder().getBuilder(index);
     }
     /**
-     * <code>repeated .ru.itmo.java.message.torrent.FileContent fileContent = 4;</code>
+     * <code>repeated .ru.itmo.java.message.torrent.FileContent fileContent = 3;</code>
      */
     public ru.itmo.java.message.torrent.FileContentOrBuilder getFileContentOrBuilder(
         int index) {
@@ -986,7 +921,7 @@ private static final long serialVersionUID = 0L;
       }
     }
     /**
-     * <code>repeated .ru.itmo.java.message.torrent.FileContent fileContent = 4;</code>
+     * <code>repeated .ru.itmo.java.message.torrent.FileContent fileContent = 3;</code>
      */
     public java.util.List<? extends ru.itmo.java.message.torrent.FileContentOrBuilder> 
          getFileContentOrBuilderList() {
@@ -997,14 +932,14 @@ private static final long serialVersionUID = 0L;
       }
     }
     /**
-     * <code>repeated .ru.itmo.java.message.torrent.FileContent fileContent = 4;</code>
+     * <code>repeated .ru.itmo.java.message.torrent.FileContent fileContent = 3;</code>
      */
     public ru.itmo.java.message.torrent.FileContent.Builder addFileContentBuilder() {
       return getFileContentFieldBuilder().addBuilder(
           ru.itmo.java.message.torrent.FileContent.getDefaultInstance());
     }
     /**
-     * <code>repeated .ru.itmo.java.message.torrent.FileContent fileContent = 4;</code>
+     * <code>repeated .ru.itmo.java.message.torrent.FileContent fileContent = 3;</code>
      */
     public ru.itmo.java.message.torrent.FileContent.Builder addFileContentBuilder(
         int index) {
@@ -1012,7 +947,7 @@ private static final long serialVersionUID = 0L;
           index, ru.itmo.java.message.torrent.FileContent.getDefaultInstance());
     }
     /**
-     * <code>repeated .ru.itmo.java.message.torrent.FileContent fileContent = 4;</code>
+     * <code>repeated .ru.itmo.java.message.torrent.FileContent fileContent = 3;</code>
      */
     public java.util.List<ru.itmo.java.message.torrent.FileContent.Builder> 
          getFileContentBuilderList() {

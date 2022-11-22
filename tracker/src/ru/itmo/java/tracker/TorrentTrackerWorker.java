@@ -55,7 +55,6 @@ public class TorrentTrackerWorker implements Runnable, AutoCloseable {
         logger.info("Get ListRequest");
         List<FileContent> files = trackerInformer.getListOfAvailableFiles();
         var listAnswer = ListAnswer.newBuilder()
-                .setCountFile(files.size())
                 .addAllFileContent(files)
                 .build();
         return () -> ResponseFromTracker.newBuilder()

@@ -21,7 +21,6 @@ public class TorrentTracker {
     public void run() {
         try (ServerSocket serverSocket = new ServerSocket(Constants.TRACKER_PORT)) {
             while (!Thread.interrupted()) {
-                System.out.println("hi");
                 Socket socket = serverSocket.accept();
                 logger.info("Client accepted");
                 readPool.submit(new TorrentTrackerWorker(socket));

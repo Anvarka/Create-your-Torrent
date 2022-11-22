@@ -5,5 +5,5 @@
 
 #mainClassName=classToExecute
 #./gradlew run -PclassToExecute=com.myClass
-./gradlew build -q
+#./gradlew build -q
 ./gradlew  --console=plain client:run
