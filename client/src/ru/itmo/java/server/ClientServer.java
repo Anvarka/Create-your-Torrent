@@ -11,7 +11,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.logging.Logger;
 
-public class ClientServer implements Runnable {
+public class ClientServer implements Runnable, AutoCloseable {
     private final ExecutorService readPool = Executors.newCachedThreadPool();
     Logger logger = Logger.getLogger(ClientServer.class.getName());
     ServerSocket serverSocket;
@@ -24,18 +24,20 @@ public class ClientServer implements Runnable {
 
     public void run() {
         try {
+            logger.info("clientServer thread activate");
             while (!Thread.interrupted()) {
                 Socket socket = serverSocket.accept();
                 logger.info("Client to connect client server: " + socket.getInetAddress().getHostAddress());
                 readPool.submit(new ClientServerWorker(socket, clientInformer));
             }
-        } catch (IOException e) {
+            close();
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        shutdownTracker();
     }
 
-    public void shutdownTracker() {
+    @Override
+    public void close() {
         readPool.shutdown();
         try {
             serverSocket.close();

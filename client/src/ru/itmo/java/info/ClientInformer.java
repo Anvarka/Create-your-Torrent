@@ -12,7 +12,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-public class ClientInformer {
+public class ClientInformer implements  AutoCloseable {
     private final Lock lock = new ReentrantLock();
     private final ConcurrentHashMap<FileContent, List<Long>> shareFileAndParts = new ConcurrentHashMap<>();
     private final ConcurrentHashMap<Long, List<Socket>> partAndUserSockets = new ConcurrentHashMap<>();
@@ -41,12 +41,7 @@ public class ClientInformer {
     }
 
     public ConcurrentHashMap.KeySetView<FileContent, List<Long>> getAllSharedFiles() {
-//        lock.lock();
-//        try {
             return shareFileAndParts.keySet();
-//        } finally {
-//            lock.unlock();
-//        }
     }
 
 
@@ -60,12 +55,7 @@ public class ClientInformer {
     }
 
     public FileContent getContentOfFile(Long idFile) {
-//        lock.lock();
-//        try {
             return idFileAndContent.get(idFile);
-//        } finally {
-//            lock.unlock();
-//        }
     }
 
     public void addHowCLientWithPart(List<Long> parts, Socket socket) {
@@ -102,6 +92,7 @@ public class ClientInformer {
                             .build();
                     shareFileAndParts.put(fileContent, FileSplitter.getParts(fileContent.getSizeFile()));
                 }
+                in.close();
             }
         } catch (FileNotFoundException ignored) {
             System.out.println("no file");
@@ -113,7 +104,7 @@ public class ClientInformer {
 //        }
     }
 
-    public void writeStateToFile() {
+    public void saveStateClient() {
         DataOutputStream out;
         try {
             out = new DataOutputStream(new FileOutputStream(Constants.CLIENT_STATE_PATH));
@@ -130,4 +121,8 @@ public class ClientInformer {
         }
     }
 
+    @Override
+    public void close() {
+        saveStateClient();
+    }
 }

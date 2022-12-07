@@ -10,7 +10,6 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class TrackerInformer {
-    java.util.logging.Logger logger = java.util.logging.Logger.getLogger(this.getClass().getName());
     private final ConcurrentHashMap<Long, Set<UserInfo>> idFileUsers = new ConcurrentHashMap<>();
     private final ConcurrentHashMap<Long, FileContent> idFileAndInfo = new ConcurrentHashMap<>();
     private final ConcurrentHashMap<UserInfo, Set<Long>> activeUsersIdFiles = new ConcurrentHashMap<>();
@@ -18,31 +17,10 @@ public class TrackerInformer {
     private final ConcurrentHashMap<UserInfo, Long> userAndTime = new ConcurrentHashMap<>();
     private final AtomicLong currentId = new AtomicLong(0);
 
-    private Lock lock = new ReentrantLock();
+    private final Lock lock = new ReentrantLock();
 
     public TrackerInformer() {
-        try {
-            File file = new File(Constants.TRACKER_STATE_PATH);
-            if (file.exists() && file.isFile()) {
-                DataInputStream in = new DataInputStream(new FileInputStream(file));
-                int count = in.readInt();
-                for (int i = 0; i < count; i++) {
-                    var fileContent = FileContent.newBuilder()
-                            .setIdFile(in.readLong())
-                            .setFilename(in.readUTF())
-                            .setSizeFile(in.readLong())
-                            .build();
-
-                    lock.lock();
-                    try {
-                        idFileAndInfo.put(fileContent.getIdFile(), fileContent);
-                    } finally {
-                        lock.unlock();
-                    }
-                }
-            }
-        } catch (IOException ignored) {
-        }
+        getStateFromFile();
     }
 
     public List<FileContent> getListOfAvailableFiles() {
@@ -161,21 +139,47 @@ public class TrackerInformer {
                 .build();
     }
 
-    public void close() throws IOException {
-        DataOutputStream out = new DataOutputStream(new FileOutputStream(Constants.TRACKER_STATE_PATH));
+    public void getStateFromFile() {
+        try {
+            File file = new File(Constants.TRACKER_STATE_PATH);
+            if (file.exists() && file.isFile()) {
+                DataInputStream in = new DataInputStream(new FileInputStream(file));
+                int count = in.readInt();
+                for (int i = 0; i < count; i++) {
+                    var fileContent = FileContent.newBuilder()
+                            .setIdFile(in.readLong())
+                            .setFilename(in.readUTF())
+                            .setSizeFile(in.readLong())
+                            .build();
+                    idFileAndInfo.put(fileContent.getIdFile(), fileContent);
+                }
+                in.close();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void saveState() {
         lock.lock();
         try {
+            DataOutputStream out = new DataOutputStream(new FileOutputStream(Constants.TRACKER_STATE_PATH));
             out.writeInt(idFileAndInfo.size());
+
             for (var l : idFileAndInfo.entrySet()) {
-                long size = l.getValue().getSizeFile();
-                String name = l.getValue().getFilename();
                 out.writeLong(l.getKey());
-                out.writeUTF(name);
-                out.writeLong(size);
+                out.writeUTF(l.getValue().getFilename());
+                out.writeLong(l.getValue().getSizeFile());
             }
+            out.close();
+        } catch (IOException e) {
+            e.printStackTrace();
         } finally {
             lock.unlock();
         }
+    }
 
+    public void close() throws IOException {
+        saveState();
     }
 }

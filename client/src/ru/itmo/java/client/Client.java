@@ -25,20 +25,23 @@ public class Client implements AutoCloseable {
     private final ExecutorService readPool = Executors.newSingleThreadExecutor();
     private final ExecutorService writePool = Executors.newSingleThreadExecutor();
     private final Logger logger = Logger.getLogger(Client.class.getName());
-    public final ServerSocket serverSocket = new ServerSocket(Constants.CLIENT_SERVER_PORT);
+    public final ServerSocket serverSocket;
 
     private final Thread reminder = new Thread(new ReminderToServer());
     public final ClientInformer clientInformer = new ClientInformer();
-    private final Thread clientServer = new Thread(new ClientServer(clientInformer, serverSocket));
+    private final Thread clientServer;
+
+    private final RequestCreator requestCreator = new RequestCreator();
 
 
-    public Client(Socket socket, Scanner scanner) throws IOException {
-        logger.info("Client init");
+    public Client(Socket socket, Scanner scanner, int port) throws IOException {
+        this.serverSocket = new ServerSocket(port);
+        logger.info("client init");
         this.trackerSocket = socket;
         this.scanner = scanner;
         clientInformer.getStateFromFile();
-
         reminder.start();
+        clientServer = new Thread(new ClientServer(clientInformer, serverSocket));
         clientServer.start();
     }
 
@@ -46,7 +49,9 @@ public class Client implements AutoCloseable {
         try {
             Socket socket = new Socket(HOST, TRACKER_PORT);
             Scanner scanner = new Scanner(System.in);
-            var client = new Client(socket, scanner);
+            int port = Integer.parseInt(args[0]);
+            var client = new Client(socket, scanner, port);
+            registerShutdownHook(client);
             client.run();
         } catch (Exception e) {
             e.printStackTrace();
@@ -54,24 +59,33 @@ public class Client implements AutoCloseable {
     }
 
     public void run() {
-        while (scanner.hasNextLine() && !Thread.interrupted()) {
-            String commandStr = scanner.nextLine();
-            String[] commandSplit = commandStr.split(" ");
-            String command = commandSplit[0];
-            clientInterface(trackerSocket, command, commandSplit);
+        while (scanner.hasNextLine() && !Thread.interrupted() && !trackerSocket.isClosed()) {
+            try {
+                String commandStr = scanner.nextLine();
+                String[] commandSplit = commandStr.split(" ");
+                String command = commandSplit[0];
+                clientInterface(trackerSocket, command, commandSplit);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         close();
     }
 
+    private static void registerShutdownHook(Client client) {
+        Runtime.getRuntime().addShutdownHook(new Thread(client::close));
+    }
+
     public void clientInterface(Socket socket, String command, String[] args) {
         RequestToTracker request = switch (command) {
-            case LIST -> RequestCreator.createListRequest();
-            case UPLOAD -> RequestCreator.createUploadRequest(args);
-            case SETUP -> RequestCreator.createSetupRequest(args);
+            case LIST_CMD -> requestCreator.createListRequest();
+            case UPLOAD_CMD -> requestCreator.createUploadRequest(args);
+            case DOWNLOAD_CMD -> requestCreator.createDownloadRequest(args);
             default -> null;
         };
         if (request == null) {
-            logger.warning("No correct request or not exist upload file");
+            logger.warning(String.format("No correct request for command: %s", command));
+            logger.info(CLIENT_RULE);
             return;
         }
         executeWriteTask(() -> {
@@ -79,14 +93,14 @@ public class Client implements AutoCloseable {
                     executeReadTask(this::handleResponseFromTracker);
                 }
         );
-        logger.info("Request send");
+        logger.info("Client: request send");
     }
 
     public void handleResponseFromTracker() throws IOException {
         var response = ResponseFromTracker.parseDelimitedFrom(trackerSocket.getInputStream());
         switch (response.getResponseCase()) {
             case LISTANSWER -> {
-                logger.info("Get List answer from tracker");
+                logger.info("Client: get ListAnswer from tracker");
                 var listAnswer = response.getListAnswer();
                 List<FileContent> files = listAnswer.getFileContentList();
 
@@ -96,7 +110,7 @@ public class Client implements AutoCloseable {
                 }
             }
             case UPLOADANSWER -> {
-                logger.info("Get Upload answer from tracker");
+                logger.info("Client: get UploadAnswer from tracker");
                 var uploadAnswer = response.getUploadAnswer();
                 clientInformer.addSharedFiles(
                         uploadAnswer.getFileContent(),
@@ -107,7 +121,7 @@ public class Client implements AutoCloseable {
                 UpdateAnswer updateAnswer = response.getUpdateAnswer();
             }
             case SOURCESANSWER -> {
-                logger.info("Get Source answer from tracker");
+                logger.info("Client: get SourceAnswer from tracker");
                 var sourcesAnswer = response.getSourcesAnswer();
                 long idFIle = sourcesAnswer.getIdFile();
                 List<UserInfo> users = sourcesAnswer.getClientWithFileList();
@@ -117,12 +131,15 @@ public class Client implements AutoCloseable {
                             .setIdFile(idFIle)
                             .build();
                     executeWriteTask(() -> {
-                        RequestToClientServer.newBuilder().setStatRequest(statRequest).build().writeDelimitedTo(socket.getOutputStream());
+                        RequestToClientServer.newBuilder()
+                                .setStatRequest(statRequest)
+                                .build()
+                                .writeDelimitedTo(socket.getOutputStream());
                         executeReadTask(() -> handleResponseFromClientServer(socket));
                     });
                 }
             }
-            default -> System.out.println("I don't understand response from track");
+            default -> logger.warning("Client: I don't understand response from tracker");
         }
     }
 
@@ -130,7 +147,7 @@ public class Client implements AutoCloseable {
         ResponseFromClientServer response = ResponseFromClientServer.parseDelimitedFrom(socket.getInputStream());
         switch (response.getResponseCase()) {
             case STATANSWER -> {
-                logger.info("Get Stat answer from clientServer");
+                logger.info("Client: get StatAnswer from clientServer");
                 StatAnswer statAnswer = response.getStatAnswer();
                 Long idFile = statAnswer.getIdFile();
                 List<Long> parts = statAnswer.getPartList();
@@ -138,7 +155,7 @@ public class Client implements AutoCloseable {
                 imposter(idFile);
             }
             case GETANSWER -> {
-                logger.info("Get Get answer from clientServer");
+                logger.info("Client: get GetAnswer from clientServer");
                 GetAnswer getAnswer = response.getGetAnswer();
                 byte[] content = getAnswer.getContent().toByteArray();
                 FileContent fileContent = getAnswer.getFileContent();
@@ -151,8 +168,7 @@ public class Client implements AutoCloseable {
                     e.printStackTrace();
                 }
             }
-            default -> logger.warning("Error in response of clientServer");
-
+            default -> logger.warning("Client: I don't understand response from clientServer");
         }
     }
 
@@ -200,14 +216,17 @@ public class Client implements AutoCloseable {
     @Override
     public void close() {
         try {
-            clientInformer.writeStateToFile();
+            logger.info("In client close");
+            trackerSocket.close();
             readPool.shutdown();
             writePool.shutdown();
             reminder.interrupt();
             clientServer.interrupt();
-            trackerSocket.close();
+            clientInformer.close();
         } catch (IOException e) {
             logger.warning("Error in close");
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -217,6 +236,7 @@ public class Client implements AutoCloseable {
     private class ReminderToServer implements Runnable {
         @Override
         public void run() {
+            logger.info("reminder thread activate");
             while (!Thread.interrupted()) {
                 try {
                     UserInfo userInfo = UserInfo.newBuilder()

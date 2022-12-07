@@ -12,47 +12,50 @@ import java.util.logging.Logger;
 
 public class TorrentTrackerWorker implements Runnable, AutoCloseable {
     private final Socket socket;
-    static private final TrackerInformer trackerInformer = new TrackerInformer();
+    private final TrackerInformer trackerInformer;
     private final ExecutorService writePool = Executors.newSingleThreadExecutor();
     Logger logger = Logger.getLogger(TorrentTrackerWorker.class.getName());
     UserInfo client;
 
 
-    public TorrentTrackerWorker(Socket socket) {
+    public TorrentTrackerWorker(Socket socket, TrackerInformer trackerInformer) {
         this.socket = socket;
+        this.trackerInformer = trackerInformer;
         client = UserInfo.newBuilder()
                 .setIp(socket.getInetAddress().getHostAddress())
                 .setPort(socket.getPort())
                 .build();
+        logger.info("create trackerWorker for client with " + client.getIp() + " " + client.getPort());
     }
 
     @Override
     public void run() {
-            try (Socket socket = this.socket) {
-                while (!Thread.interrupted()) {
-                    RequestToTracker requestFromClient = RequestToTracker.parseDelimitedFrom(socket.getInputStream());
-                    WriteTask writeTask = switch (requestFromClient.getRequestCase()) {
-                        case LISTREQUEST -> handle(requestFromClient.getListRequest());
-                        case UPLOAD -> handle(requestFromClient.getUpload());
-                        case UPDATE -> handle(requestFromClient.getUpdate());
-                        case SOURCES -> handle(requestFromClient.getSources());
-                        default -> null;
-                    };
-                    if (writeTask == null) {
-                        logger.info("Error request");
-                        continue;
-                    }
-                    executeWriteTask(writeTask);
+        try (Socket socket = this.socket) {
+            while (!Thread.interrupted()) {
+                RequestToTracker requestFromClient = RequestToTracker.parseDelimitedFrom(socket.getInputStream());
+                WriteTask writeTask = switch (requestFromClient.getRequestCase()) {
+                    case LISTREQUEST -> handle(requestFromClient.getListRequest());
+                    case UPLOAD -> handle(requestFromClient.getUpload());
+                    case UPDATE -> handle(requestFromClient.getUpdate());
+                    case SOURCES -> handle(requestFromClient.getSources());
+                    default -> null;
+                };
+                if (writeTask == null) {
+                    logger.warning("error request " + requestFromClient.getRequestCase());
+                    logger.info(Constants.TRACKER_RULE);
+                    continue;
                 }
-            } catch (IOException e) {
-                System.out.println("error in tracker file");
+                executeWriteTask(writeTask);
             }
+        } catch (IOException e) {
+            logger.info("error in tracker file");
+        }
         close();
-        logger.info("Client disconnected");
+        logger.warning("client with " + client.getIp() + " " + client.getPort() + " disconnected");
     }
 
     private WriteTask handle(ListRequest listRequest) {
-        logger.info("Get ListRequest");
+        logger.info("get ListRequest from client with " + client.getIp() + " " + client.getPort());
         List<FileContent> files = trackerInformer.getListOfAvailableFiles();
         var listAnswer = ListAnswer.newBuilder()
                 .addAllFileContent(files)
@@ -64,7 +67,7 @@ public class TorrentTrackerWorker implements Runnable, AutoCloseable {
     }
 
     private WriteTask handle(UploadRequest uploadRequest) {
-        logger.info("Get UploadRequest");
+        logger.info("get UploadRequest from client with " + client.getIp() + " " + client.getPort());
         FileContent fileInfo = trackerInformer.uploadFile(uploadRequest, client);
         var uploadAnswer = UploadAnswer.newBuilder()
                 .setFileContent(fileInfo)
@@ -76,16 +79,16 @@ public class TorrentTrackerWorker implements Runnable, AutoCloseable {
     }
 
     private WriteTask handle(UpdateRequest updateRequest) {
-        logger.info("Get UpdateRequest");
-        UpdateAnswer b = trackerInformer.updateList(updateRequest, client);
+        logger.info("get UpdateRequest from client with " + client.getIp() + " " + client.getPort());
+        UpdateAnswer updateAnswer = trackerInformer.updateList(updateRequest, client);
         return () -> ResponseFromTracker.newBuilder()
-                .setUpdateAnswer(b)
+                .setUpdateAnswer(updateAnswer)
                 .build()
                 .writeDelimitedTo(socket.getOutputStream());
     }
 
     private WriteTask handle(SourcesRequest sourcesRequest) {
-        logger.info("Get SourceRequest");
+        logger.info("get SourceRequest from client with " + client.getIp() + " " + client.getPort());
         SourcesAnswer sourcesAnswer = trackerInformer.sources(sourcesRequest);
 
         return () -> ResponseFromTracker.newBuilder()
@@ -107,12 +110,6 @@ public class TorrentTrackerWorker implements Runnable, AutoCloseable {
 
     @Override
     public void close() {
-        try {
-            writePool.shutdown();
-            trackerInformer.close();
-        } catch (IOException e){
-            System.out.println("Error in tracker file");
-        }
-
+        writePool.shutdown();
     }
 }
