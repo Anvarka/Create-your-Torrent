@@ -45,7 +45,8 @@ public class FileSplitter {
         if (endBlock > fileInfo.getSizeFile()) {
             endBlock = fileInfo.getSizeFile();
         }
-        String path = Constants.SAVE_DIR + fileInfo.getIdFile();
+        int l = fileInfo.getFilename().lastIndexOf("/");
+        String path = Constants.SAVE_DIR + fileInfo.getFilename().substring(l + 1);
 
         RandomAccessFile file = new RandomAccessFile(path, "rw");
         file.setLength(fileInfo.getSizeFile());

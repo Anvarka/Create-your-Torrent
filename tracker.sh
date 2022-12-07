@@ -2,4 +2,5 @@
 #cd `dirname "$0"`
 #java tracker/src/ru/itmo/java/tracker/TorrentTracker.java
 
-./gradlew  --console=plain tracker:run
+#./gradlew  --console=plain tracker:run
+java -jar jars/tracker-jar.jar
