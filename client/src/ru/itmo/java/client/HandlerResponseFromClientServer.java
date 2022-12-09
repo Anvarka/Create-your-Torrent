@@ -14,40 +14,45 @@ public class HandlerResponseFromClientServer {
     private final ClientInformer clientInformer;
     private final Client client;
 
-    public HandlerResponseFromClientServer(Client client, ClientInformer clientInformer){
+    public HandlerResponseFromClientServer(Client client, ClientInformer clientInformer) {
         this.clientInformer = clientInformer;
         this.client = client;
     }
+
     public void handleResponseFromClientServer(Socket socket) throws IOException {
         ResponseFromClientServer response = ResponseFromClientServer.parseDelimitedFrom(socket.getInputStream());
         switch (response.getResponseCase()) {
-            case STATANSWER -> {
-                logger.info("Client: get StatAnswer from clientServer");
-                StatAnswer statAnswer = response.getStatAnswer();
-                Long idFile = statAnswer.getIdFile();
-                List<Long> parts = statAnswer.getPartList();
-                clientInformer.addHowCLientWithPart(parts, socket);
-                imposter(idFile);
-            }
-            case GETANSWER -> {
-                logger.info("Client: get GetAnswer from clientServer");
-                GetAnswer getAnswer = response.getGetAnswer();
-                byte[] content = getAnswer.getContent().toByteArray();
-                FileContent fileContent = getAnswer.getFileContent();
-                long part = getAnswer.getPartOfFile();
-                try {
-                    FileSplitter.writeContentToPartOfFile(fileContent, part, content);
-                    logger.info("Write part this file!");
-                    clientInformer.addSharedFile(fileContent, part);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-            default -> logger.warning("Client: I don't understand response from clientServer");
+            case STATANSWER -> handleStatAnswer(response, socket);
+            case GETANSWER -> handleGetAnswer(response);
+            default -> logger.warning(String.format("No valid response %s from clientServer", response));
         }
     }
 
-    private void imposter(Long idFile) {
+    private void handleStatAnswer(ResponseFromClientServer response, Socket socket) {
+        logger.info("Get StatAnswer from clientServer");
+        StatAnswer statAnswer = response.getStatAnswer();
+        Long idFile = statAnswer.getIdFile();
+        List<Long> parts = statAnswer.getPartList();
+        clientInformer.addHowCLientWithPart(parts, socket);
+        downloader(idFile);
+    }
+
+    private void handleGetAnswer(ResponseFromClientServer response) {
+        logger.info("Get GetAnswer from clientServer");
+        GetAnswer getAnswer = response.getGetAnswer();
+        byte[] content = getAnswer.getContent().toByteArray();
+        FileContent fileContent = getAnswer.getFileContent();
+        long part = getAnswer.getPartOfFile();
+        try {
+            FileSplitter.writeContentToPartOfFile(fileContent, part, content);
+            logger.info("Write part this file!");
+            clientInformer.addSharedFile(fileContent, part);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void downloader(Long idFile) {
         java.util.Random random = new java.util.Random();
 
         for (Map.Entry<Long, List<Socket>> partAndSockets : clientInformer.getPartAndUserSockets().entrySet()) {

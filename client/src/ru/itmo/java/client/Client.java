@@ -33,19 +33,8 @@ public class Client implements AutoCloseable {
     public final HandlerResponseFromTracker handlerResponseFromTracker;
     public final HandlerResponseFromClientServer handleResponseFromClientServer;
 
-
-    public Client(Socket socket, Scanner scanner, int port) throws IOException {
-        this.serverSocket = new ServerSocket(port);
-        logger.info("client init");
-        this.trackerSocket = socket;
-        this.scanner = scanner;
-        clientInformer.getStateFromFile();
-        reminder = new Thread(new ReminderToServer(trackerSocket, serverSocket, this, clientInformer));
-        reminder.start();
-        clientServer = new Thread(new ClientServer(clientInformer, serverSocket));
-        clientServer.start();
-        handleResponseFromClientServer = new HandlerResponseFromClientServer(this, clientInformer);
-        handlerResponseFromTracker = new HandlerResponseFromTracker(trackerSocket, this, clientInformer, handleResponseFromClientServer);
+    private static void registerShutdownHook(Client client) {
+        Runtime.getRuntime().addShutdownHook(new Thread(client::close));
     }
 
     public static void main(String[] args) {
@@ -61,8 +50,18 @@ public class Client implements AutoCloseable {
         }
     }
 
-    private static void registerShutdownHook(Client client) {
-        Runtime.getRuntime().addShutdownHook(new Thread(client::close));
+    public Client(Socket socket, Scanner scanner, int port) throws IOException {
+        this.serverSocket = new ServerSocket(port);
+        logger.info("client init");
+        this.trackerSocket = socket;
+        this.scanner = scanner;
+        clientInformer.getStateFromFile();
+        reminder = new Thread(new ReminderToServer(trackerSocket, serverSocket, this, clientInformer));
+        reminder.start();
+        clientServer = new Thread(new ClientServer(clientInformer, serverSocket));
+        clientServer.start();
+        handleResponseFromClientServer = new HandlerResponseFromClientServer(this, clientInformer);
+        handlerResponseFromTracker = new HandlerResponseFromTracker(trackerSocket, this, clientInformer, handleResponseFromClientServer);
     }
 
     public void run() {
@@ -96,7 +95,7 @@ public class Client implements AutoCloseable {
                     executeReadTask(handlerResponseFromTracker::handleResponseFromTracker);
                 }
         );
-        logger.info("Client: request send");
+        logger.info("Request send");
     }
 
     public void executeWriteTask(WriteTask task) {
@@ -122,15 +121,13 @@ public class Client implements AutoCloseable {
         try {
             logger.info("Client is closing! Goodbye!");
             trackerSocket.close();
+            clientServer.interrupt();
+            reminder.interrupt();
             readPool.shutdown();
             writePool.shutdown();
-            reminder.interrupt();
-            clientServer.interrupt();
             clientInformer.close();
-        } catch (IOException e) {
-            logger.warning("Error in close");
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.warning(String.format("Error in close: %s", e.getMessage()));
         }
     }
 }

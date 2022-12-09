@@ -15,19 +15,18 @@ public class TorrentTracker implements AutoCloseable {
     private final TrackerInformer trackerInformer = new TrackerInformer();
     Logger logger = Logger.getLogger(TorrentTracker.class.getName());
 
+    private static void registerShutdownHook(TorrentTracker tracker) {
+        Runtime.getRuntime().addShutdownHook(new Thread(tracker::close));
+    }
+
     public static void main(String[] args) {
         TorrentTracker tracker = new TorrentTracker();
         registerShutdownHook(tracker);
         tracker.run();
     }
 
-    private static void registerShutdownHook(TorrentTracker tracker) {
-        Runtime.getRuntime().addShutdownHook(new Thread(tracker::close));
-    }
-
     public void run() {
-        trackerInformer.getStateFromFile();
-        logger.info("tracker init");
+        logger.info("Tracker is activated");
         try (ServerSocket serverSocket = new ServerSocket(Constants.TRACKER_PORT)) {
             while (!Thread.interrupted()) {
                 Socket socket = serverSocket.accept();
@@ -37,12 +36,12 @@ public class TorrentTracker implements AutoCloseable {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        logger.info("tracker is dead");
+        logger.info("Tracker is dead");
     }
 
     @Override
     public void close() {
-        logger.info("tracker is closing");
+        logger.info("Tracker is closed");
         try {
             trackerInformer.close();
         } catch (IOException e) {

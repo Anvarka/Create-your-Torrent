@@ -19,57 +19,69 @@ public class HandlerResponseFromTracker {
     public HandlerResponseFromTracker(Socket trackerSocket,
                                       Client client,
                                       ClientInformer clientInformer,
-                                      HandlerResponseFromClientServer handlerResponseFromClientServer){
+                                      HandlerResponseFromClientServer handlerResponseFromClientServer) {
         this.trackerSocket = trackerSocket;
         this.clientInformer = clientInformer;
         this.client = client;
         this.handlerResponseFromClientServer = handlerResponseFromClientServer;
     }
 
-    public void handleResponseFromTracker() throws IOException {
-        var response = ResponseFromTracker.parseDelimitedFrom(trackerSocket.getInputStream());
-        switch (response.getResponseCase()) {
-            case LISTANSWER -> {
-                logger.info("Client: get ListAnswer from tracker");
-                var listAnswer = response.getListAnswer();
-                List<FileContent> files = listAnswer.getFileContentList();
+    public void handleResponseFromTracker() {
+        try {
+            var response = ResponseFromTracker.parseDelimitedFrom(trackerSocket.getInputStream());
+            switch (response.getResponseCase()) {
+                case LISTANSWER -> handleListAnswer(response);
+                case UPLOADANSWER -> handleUploadAnswer(response);
+                case UPDATEANSWER -> handleUpdateAnswer(response);
+                case SOURCESANSWER -> handleSourceAnswer(response);
+                default -> logger.warning(String.format("no valid response %s from tracker", response));
+            }
+        } catch (Exception e) {
+            logger.warning(e.getMessage());
+        }
+    }
 
-                for (FileContent el : files) {
-                    System.out.printf("idFile: %s, filename: %s, size: %s%n",
-                            el.getIdFile(), el.getFilename(), el.getSizeFile());
-                }
-            }
-            case UPLOADANSWER -> {
-                logger.info("Client: get UploadAnswer from tracker");
-                var uploadAnswer = response.getUploadAnswer();
-                clientInformer.addSharedFiles(
-                        uploadAnswer.getFileContent(),
-                        FileSplitter.getParts(uploadAnswer.getFileContent().getSizeFile())
-                );
-            }
-            case UPDATEANSWER -> {
-                UpdateAnswer updateAnswer = response.getUpdateAnswer();
-            }
-            case SOURCESANSWER -> {
-                logger.info("Client: get SourceAnswer from tracker");
-                var sourcesAnswer = response.getSourcesAnswer();
-                long idFIle = sourcesAnswer.getIdFile();
-                List<UserInfo> users = sourcesAnswer.getClientWithFileList();
-                for (var user : users) {
-                    Socket socket = new Socket(user.getIp(), user.getPort());
-                    StatRequest statRequest = StatRequest.newBuilder()
-                            .setIdFile(idFIle)
-                            .build();
-                    client.executeWriteTask(() -> {
-                        RequestToClientServer.newBuilder()
-                                .setStatRequest(statRequest)
-                                .build()
-                                .writeDelimitedTo(socket.getOutputStream());
-                        client.executeReadTask(() -> handlerResponseFromClientServer.handleResponseFromClientServer(socket));
-                    });
-                }
-            }
-            default -> logger.warning("Client: I don't understand response from tracker");
+    private void handleListAnswer(ResponseFromTracker response) {
+        logger.info("Get ListAnswer from tracker");
+        var listAnswer = response.getListAnswer();
+        List<FileContent> files = listAnswer.getFileContentList();
+
+        for (FileContent el : files) {
+            System.out.printf("idFile: %s, filename: %s, size: %s%n",
+                    el.getIdFile(), el.getFilename(), el.getSizeFile());
+        }
+    }
+
+    private void handleUploadAnswer(ResponseFromTracker response) {
+        logger.info("Get UploadAnswer from tracker");
+        var uploadAnswer = response.getUploadAnswer();
+        clientInformer.addSharedFiles(
+                uploadAnswer.getFileContent(),
+                FileSplitter.getParts(uploadAnswer.getFileContent().getSizeFile())
+        );
+    }
+
+    private void handleUpdateAnswer(ResponseFromTracker response) {
+        UpdateAnswer updateAnswer = response.getUpdateAnswer();
+    }
+
+    private void handleSourceAnswer(ResponseFromTracker response) throws IOException {
+        logger.info("Get SourceAnswer from tracker");
+        var sourcesAnswer = response.getSourcesAnswer();
+        long idFIle = sourcesAnswer.getIdFile();
+        List<UserInfo> users = sourcesAnswer.getClientWithFileList();
+        for (var user : users) {
+            Socket socket = new Socket(user.getIp(), user.getPort());
+            StatRequest statRequest = StatRequest.newBuilder()
+                    .setIdFile(idFIle)
+                    .build();
+            client.executeWriteTask(() -> {
+                RequestToClientServer.newBuilder()
+                        .setStatRequest(statRequest)
+                        .build()
+                        .writeDelimitedTo(socket.getOutputStream());
+                client.executeReadTask(() -> handlerResponseFromClientServer.handleResponseFromClientServer(socket));
+            });
         }
     }
 }

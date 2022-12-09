@@ -28,7 +28,7 @@ public class ReminderToServer implements Runnable {
     }
     @Override
     public void run() {
-        logger.info("reminder thread activate");
+        logger.info("Reminder is activated");
         while (!Thread.interrupted()) {
             try {
                 UserInfo userInfo = UserInfo.newBuilder()
