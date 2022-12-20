@@ -52,7 +52,7 @@ public class ClientInformer implements AutoCloseable {
         return idFileAndContent.get(idFile);
     }
 
-    public void addHowCLientWithPart(List<Long> parts, Socket socket) {
+    public void addHowClientWithPart(List<Long> parts, Socket socket) {
         lock.lock();
         try {
             for (var part : parts) {
@@ -71,7 +71,6 @@ public class ClientInformer implements AutoCloseable {
     }
 
     public void getStateFromFile() {
-        lock.lock();
         try {
             File file = new File(Constants.CLIENT_STATE_PATH);
             if (file.exists() && file.isFile()) {
@@ -92,8 +91,6 @@ public class ClientInformer implements AutoCloseable {
             System.out.println("no file");
         } catch (IOException e) {
             System.out.println("no data");
-        } finally {
-            lock.unlock();
         }
     }
 

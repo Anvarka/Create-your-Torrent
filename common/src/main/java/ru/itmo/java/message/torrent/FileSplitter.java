@@ -1,5 +1,6 @@
 package ru.itmo.java.message.torrent;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
@@ -47,7 +48,11 @@ public class FileSplitter {
         }
         int l = fileInfo.getFilename().lastIndexOf("/");
         String path = Constants.SAVE_DIR + fileInfo.getFilename().substring(l + 1);
-
+        File creatingFile = new File(path);
+        File parent = creatingFile.getParentFile();
+        if (parent != null && !parent.exists() && !parent.mkdirs()) {
+            throw new IOException("Couldn't create dir");
+        }
         RandomAccessFile file = new RandomAccessFile(path, "rw");
         file.setLength(fileInfo.getSizeFile());
         byte[] content = Arrays.copyOf(bytes, (int) (endBlock - startBlock));

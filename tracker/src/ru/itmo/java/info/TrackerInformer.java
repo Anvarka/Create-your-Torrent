@@ -24,46 +24,33 @@ public class TrackerInformer {
     }
 
     public List<FileContent> getListOfAvailableFiles() {
-        List<FileContent> fileContentList;
-        lock.lock();
-        try {
-            fileContentList = new ArrayList<>();
-            for (Long idFile : idFileUsers.keySet()) {
-                FileContent fileContent = idFileAndInfo.get(idFile);
-                fileContentList.add(fileContent);
-            }
-        } finally {
-            lock.unlock();
+        List<FileContent> fileContentList = new ArrayList<>();
+        for (Long idFile : idFileUsers.keySet()) {
+            FileContent fileContent = idFileAndInfo.get(idFile);
+            fileContentList.add(fileContent);
         }
         return fileContentList;
     }
 
     public FileContent uploadFile(UploadRequest request, UserInfo userInfo) {
-        lock.lock();
-        FileContent fileInfo;
-        try {
-            long idFile = currentId.incrementAndGet();
-            fileInfo = FileContent.newBuilder()
-                    .setIdFile(idFile)
-                    .setFilename(request.getFilename())
-                    .setSizeFile(request.getSize())
-                    .build();
+        long idFile = currentId.incrementAndGet();
+        FileContent fileInfo = FileContent.newBuilder()
+                .setIdFile(idFile)
+                .setFilename(request.getFilename())
+                .setSizeFile(request.getSize())
+                .build();
 
-            idFileAndInfo.putIfAbsent(idFile, fileInfo);
+        idFileAndInfo.putIfAbsent(idFile, fileInfo);
 
-            if (!idFileUsers.containsKey(idFile)) {
-                idFileUsers.computeIfAbsent(idFile, (key) -> new HashSet<>());
-            }
-            idFileUsers.get(idFile).add(userInfo);
-
-            if (!activeUsersIdFiles.containsKey(userInfo)) {
-                activeUsersIdFiles.computeIfAbsent(userInfo, (key) -> new HashSet<>());
-            }
-            activeUsersIdFiles.get(userInfo).add(idFile);
-
-        } finally {
-            lock.unlock();
+        if (!idFileUsers.containsKey(idFile)) {
+            idFileUsers.computeIfAbsent(idFile, (key) -> new HashSet<>());
         }
+        idFileUsers.get(idFile).add(userInfo);
+
+        if (!activeUsersIdFiles.containsKey(userInfo)) {
+            activeUsersIdFiles.computeIfAbsent(userInfo, (key) -> new HashSet<>());
+        }
+        activeUsersIdFiles.get(userInfo).add(idFile);
         return fileInfo;
     }
 

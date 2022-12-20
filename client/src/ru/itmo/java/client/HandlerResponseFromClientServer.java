@@ -33,7 +33,7 @@ public class HandlerResponseFromClientServer {
         StatAnswer statAnswer = response.getStatAnswer();
         Long idFile = statAnswer.getIdFile();
         List<Long> parts = statAnswer.getPartList();
-        clientInformer.addHowCLientWithPart(parts, socket);
+        clientInformer.addHowClientWithPart(parts, socket);
         downloader(idFile);
     }
 
