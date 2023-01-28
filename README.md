@@ -1,136 +1,133 @@
 # Torrent
-* На трекере хранится список файлов и информация об активных пользователях, у которых есть те или иные файлы (возможно не целиком).
-* С помощью клиентского приложения можно просматривать список файлов на трекере, а также добавлять новые и выбирать файлы из списка для скачивания.
-* Файлы условно разбиваются на последовательные блоки бинарных данных константного размера (например 10M). Последний блок может иметь меньший размер. Блоки нумеруются с нуля.
+* The tracker stores a list of files and information about active users who have certain files (perhaps not entirely).
+* Using the client application, you can view the list of files on the tracker, as well as add new ones and select files from the list for download.
+* Files are conditionally divided into consecutive blocks of binary data of constant size (for example, 10M). The last block may be smaller. Blocks are numbered from zero.
 
 ---
 
 # Torrent
-* Клиент при подключении отправляет на трекер список раздаваемых им файлов.
-* При скачивании файла клиент получает у трекера информацию о клиентах, раздающих файл (сидах), и далее общается с ними напрямую.
-* У отдельного сида можно узнать о том, какие полные части у него есть, а также скачать их.
-* После скачивания отдельных блоков некоторого файла клиент становится сидом.
+* When connecting, the client sends a list of files distributed by it to the tracker.
+* When downloading a file, the client receives from the tracker information about the clients distributing the file (seeds), and then communicates with them directly.
+* From an individual seed, you can find out what full parts it has, as well as download them.
+* After downloading individual blocks of a certain file, the client becomes a seed.
 
 ---
-# Интерфейс клиента
-* `upload [FILENAME]` -- клиент может загружать файл
-* `list` -- клиент может узнать раздаваемые файлы
-* `download [ID]` -- клиент может загрузить понравившийся ему файл
+# Client Interface
+* `upload [FILENAME]` -- client can upload file
+* `list` -- the client can find out the files being distributed
+* `download [ID]` -- the client can download the file he likes
 
 ---
 # Torrent-tracker
-* Хранит мета-информацию о раздаваемых файлах:
-    * идентификатор
-    * активные клиенты (недавно был update), у которых есть этот файл целиком или некоторые его части
-* Порт сервера: 8081
-* Запросы:
-    * `list` — список раздаваемых файлов
-    * `upload` — публикация нового файла
-    * `sources` — список клиентов, владеющих определенным файлов целиком или некоторыми его частями
-    * `update` — загрузка клиентом данных о раздаваемых файлах
-* **Важно:** перечисленные выше запросы являются _рекомендованными_, как и их формат, описываемый ниже. Вы можете менять список и семантику запросов на своё усмотрение (в случае таких изменений вам требуется где-то задокументировать какие запросы есть и для чего используются (можно в комментариях в `.proto`)).
-    * Реализовывать (де)сериализацию запросов вы можете как вручную, так и с использованием любых библиотек и фреймворков
-
+* Keeps meta-information about distributed files:
+    * identificator
+    * active clients (there was an update recently) that have this file in whole or some parts of it
+* Server's port: 8081
+* Requests:
+    * `list` — list of distributed files
+    * `upload` — publishing a new file
+    * `sources` — a list of clients who own certain files in whole or in part
+    * `update` — downloading by the client of data about the files being distributed
     
 ---
 # List
-* Формат запроса:
+* Request format:
 
-* Формат ответа:
+* Request answer:
     * (FileContent: id, name, size)*,
-    * id — идентификатор файла
-    * name — название файла
-    * size — размер файла
+    * id — identificator of file
+    * name — file name
+    * size — size of file
 
 ---
 # Upload
-* Формат запроса:
+* Request format:
     * filename, size, userInfo
-    * filename — название файла
-    * size — размер файла
-    * UserInfo: ip, port -- информация про клиента
-* Формат ответа:
-    * FileContent: id, size, name — информация про файл
+    * filename — file name
+    * size — size of file
+    * UserInfo: ip, port -- information about the client
+* Request answer:
+    * FileContent: id, size, name — information about the file
 
-# Примечание
-* Если клиент А и клиент Б решили опубликовать файл abc.txt, то это будут **разные** файлы, иными словами каждый запрос на публикацию файла возвращает **новый** id
+# Note
+* If client A and client B decide to publish the abc.txt file, then these will be **different** files, in other words, each request to publish the file returns a **new** id
 
 ---
 
 # Sources
 
-* Формат запроса:
+* Request format:
     * <3: Byte> <id: Int>,
-    * id — идентификатор файла
-* Формат ответа:
+    * id — identificator of file
+* Request answer:
     * idFile (UserInfo)*,
-    * UserInfo: ip, port -- информация про клиента
-    * id — id файла
+    * UserInfo: ip, port -- information about the client
+    * id — id file
 ---
 
 # Update
 
-* Формат запроса:
+* Request format:
     * userInfo, portOfClientServer, (fileContent)*,
-    * userInfo — порт клиента,
-    * portOfClientServer — порт клиент-сервера
-    * fileContent — информация про файл
-* Формат ответа:
+    * userInfo — client port,
+    * portOfClientServer — client-server port
+    * fileContent — information about the file
+* Request answer:
     * <status: Boolean>,
-    * status — True, если информация успешно обновлена
+    * status — True, if the information is successfully updated
 
-# Примечание
-* Клиент обязан исполнять данный запрос каждые 5 минут, иначе сервер считает, что клиент ушел с раздачи
+# Note
+* The client is obliged to execute this request every 5 minutes, otherwise the server considers that the client has left the distribution
 ---
 # Torrent-client
-* Порт клиента указывается при запуске и передается на трекер в рамках запроса update
-* Каждый файл раздается по частям, размер части — константа на всё приложение
-* Клиент хранит и раздает эти самые части
-* Запросы:
-    * stat — доступные для раздачи части определенного файла
-    * get — скачивание части определенного файла
+* The client port is specified at startup and passed to the tracker as part of the update request
+* Each file is distributed in parts, the size of the part is a constant for the entire application
+* The client stores and distributes these very parts
+* Requests:
+    * stat — parts of a particular file available for distribution
+    * get — download part of a specific file
 
 ---
 
 # Stat
 
-* Формат запроса:
+* Request format:
     * <1: Byte> <id: Int>,
-    * id — идентификатор файла
-* Формат ответа:
+    * id — identificator of file
+* Request answer:
     * userInfo idFile (<part: Int>)*,
-    * userInfo -- информация про клиента
-    * idFile — id файла
-    * part — номер части
+    * userInfo -- information about the client
+    * idFile — id file
+    * part — part number
 
-# Примечание
+# Note
 
-* Часть считается доступной для раздачи, если она хранится на клиенте целиком
+* A part is considered available for distribution if it is stored entirely on the client
 ---
 # Get
-* Формат запроса:
+* Request format:
     * <2: Byte> <id: Int> <part: Int>
-    * id — идентификатор файла,
-    * part — номер части
-* Формат ответа:
+    * id — identificator of file,
+    * part — part number
+* Request answer:
     * <content: Bytes>,
-    * content — содержимое части
-    * fileContent -- информация про какой файл
-    * partOfFile -- какая часть файла
+    * content — part content
+    * fileContent -- information about which file
+    * partOfFile -- what part of the file
 ---
 
-# Требования:
-* Gradle проект
-* Консольные трекер и клиент, позволяющие исполнять указанные запросы
-* Тесты
-* Документация процесса сборки артефактов вашего приложения
-    * В идеале, хотелось бы, чтобы этими артефактами были два shell-скрипта
-      (один для запуска клиента, другой - для сервера)
-    * Однако двух executable jar-файлов будет тоже достаточно
-* Клиент должен сохранять информацию о раздаваемых файлах между перезапусками
-* Трекер должен сохранять список раздаваемых файлов между перезапусками
+# Requirements:
+* Gradle project
+* Console tracker and client that allow you to execute the specified requests
+* Tests
+* Documentation of your application's artifact build process
+     * Ideally, I would like these artifacts to be two shell scripts
+       (one for running the client, the other for the server)
+     * However, two executable jar files will also be enough
+* The client must save information about the distributed files between restarts
+* The tracker should save the list of distributed files between restarts
 
-# Запуск
-* tracker.sh -- запуск трекера
-* client.sh -- запуск клиента, внутри скрипта менять номер порта для многопользовательской версии
+# run
+* tracker.sh -- run tracker
+* client.sh -- start the client, inside the script change the port number for the multi-user version
 
